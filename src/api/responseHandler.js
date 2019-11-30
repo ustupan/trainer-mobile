@@ -2,10 +2,10 @@ import {Alert} from 'react-native'
 
 
 export default function responseHandle(error){
-    console.log("a",error.response.status);
+    let message = error.response ? error.response.data : error.message;
+    console.log(message,"aa");
     if(error.response === undefined){
-        Alert.alert('Error: '+error.message,'Check you internet connection.');
-
+        Alert.alert('Error: '+message);
     }
     else{
         switch (error.response.status) {
@@ -21,8 +21,11 @@ export default function responseHandle(error){
             case 409:
                 Alert.alert("This username exist!","Type email which not exit in our database.");
                 break;
+            case 403:
+                Alert.alert("Nie uzyskano dostępu!","Twoje dane są niepoprawne.");
+                break;
             default:
-                return error.json();
+                Alert.alert('Coś poszło nie tak!',message);
         }
     }
 }

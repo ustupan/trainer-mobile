@@ -72,10 +72,10 @@ const ProfileStackNavigator = createStackNavigator(
 );
 
 const AppSwitchNavigator = createSwitchNavigator({
-
     Welcome: { screen: ProfileStackNavigator},
     Dashboard: { screen: AppDrawerNavigator }
 });
 
 
-export const AppContainer = createAppContainer(AppSwitchNavigator);
+export const AppContainer = createAppContainer(AppDrawerNavigator);
+export const ProfileContainer = createAppContainer(AppSwitchNavigator);

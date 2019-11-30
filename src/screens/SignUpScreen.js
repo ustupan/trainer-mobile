@@ -14,12 +14,12 @@ export default class SignUp extends React.Component {
 
         this.state = {
             loading: true,
-            username: "a",
-            email: "a@o2.pl",
-            password: "a",
-            confirmPassword: "a",
-            gender: "a",
-            roleName: "a"
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            gender: "",
+            roleName: ""
         };
     }
 

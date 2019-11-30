@@ -1,7 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
 import Button from "react-native-button";
 import { AppStyles } from "../../AppStyles";
+import {login} from "../api/auth";
+import {saveItem} from "../api/deviceStorage"
+import jwt_decode from 'jwt-decode';
+import responseHandle from "../api/responseHandler";
+import {getItem} from "../api/deviceStorage";
 
 
 class SignIn extends React.Component {
@@ -10,9 +15,45 @@ class SignIn extends React.Component {
         this.state = {
             loading: true,
             username: "",
-            password: ""
+            password: "",
+            xd: ""
         };
     }
+
+
+
+    getJwtRoles = (jwt) => {
+        let decoded = jwt_decode(jwt);
+        return JSON.stringify(decoded['role']);
+    };
+
+
+    onValid = () => {
+        const username = this.state.username;
+        const password = this.state.password;
+        const confirmPassword = this.state.confirmPassword;
+        const email = this.state.email;
+        const role = this.state.roleName;
+
+        if (username === undefined || username === '') throw {message: "Nazwa użytkownika jest wymagana!" };
+
+        if (password === undefined || password === '') throw {message: "Hasło jest wymagane!" };
+
+    };
+
+
+    signIn = async () => {
+        try {
+            this.onValid();
+            const response = await login(this.state);
+            await saveItem('jwt',response.headers['authorization']).then(()=> saveItem('roles', this.getJwtRoles(response.headers['authorization'])));
+            await this.props.navigation.navigate('Dashboard');
+            Alert.alert('Pomyślnie zalogowano!');
+        } catch (err) {
+            responseHandle(err);
+        }
+    };
+
     render() {
         return (
             <View style={styles.container}>
@@ -41,6 +82,7 @@ class SignIn extends React.Component {
                 <Button
                     containerStyle={styles.loginContainer}
                     style={styles.loginText}
+                    onPress = {this.signIn}
                 >
                     Zaloguj
                 </Button>
