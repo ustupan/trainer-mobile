@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
 import Button from "react-native-button";
-import { AppStyles } from "../../AppStyles";
-import {login} from "../api/auth";
-import {saveItem} from "../api/deviceStorage"
+import { AppStyles } from "../../../AppStyles";
+import {login} from "../../api/services/authService";
+import {saveItem} from "../../api/deviceStorage"
 import jwt_decode from 'jwt-decode';
-import responseHandle from "../api/responseHandler";
-import {getItem} from "../api/deviceStorage";
+import responseHandle from "../../api/responseHandler";
+import {getItem} from "../../api/deviceStorage";
 
 
 class SignIn extends React.Component {
@@ -16,7 +16,6 @@ class SignIn extends React.Component {
             loading: true,
             username: "",
             password: "",
-            xd: ""
         };
     }
 
@@ -46,8 +45,16 @@ class SignIn extends React.Component {
         try {
             this.onValid();
             const response = await login(this.state);
-            await saveItem('jwt',response.headers['authorization']).then(()=> saveItem('roles', this.getJwtRoles(response.headers['authorization'])));
-            await this.props.navigation.navigate('Dashboard');
+
+            await saveItem('jwt',response.headers['authorization']).then(() => {
+                let roles = this.getJwtRoles(response.headers['authorization']);
+                saveItem('roles', roles).then(() => {
+                    if (roles.filter((role) => role.includes('Athlete'))) this.props.navigation.navigate('TrainerDashboard');  // zmienic athlete dashboard
+                    else this.props.navigation.navigate('TrainerDashboard');
+                })
+            });
+            //await saveItem('jwt',response.headers['authorization']).then(()=> saveItem('roles', this.getJwtRoles(response.headers['authorization'])));
+            //await this.props.navigation.navigate('Dashboard');
             Alert.alert('Pomyślnie zalogowano!');
         } catch (err) {
             responseHandle(err);

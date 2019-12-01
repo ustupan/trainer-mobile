@@ -4,18 +4,21 @@ import {
     createDrawerNavigator, createStackNavigator,
     createSwitchNavigator
 } from "react-navigation";
-import WelcomeScreen from "./src/screens/WelcomeScreen";
-import SignIn from "./src/screens/SignInScreen";
-import SignUp from "./src/screens/SignUpScreen";
+import WelcomeScreen from "./src/screens/welcomeScreens/WelcomeScreen";
+import SignIn from "./src/screens/welcomeScreens/SignInScreen";
+import SignUp from "./src/screens/welcomeScreens/SignUpScreen";
 import React from "react";
 import { Ionicons } from '@expo/vector-icons'
 import Dashboard from "./src/screens/DashboardScreen";
+import AthleteListScreen from "./src/screens/trainerScreens/AthleteListScreen";
+import LogoutComponent from "./src/components/Logout.component";
+import AthleteProfileScreen from "./src/screens/trainerScreens/AthleteProfileScreen";
 
 
 
 const DashboardStackNavigator = createStackNavigator(
     {
-        Dashboard: {screen: Dashboard}
+        Dashboard: {screen: Dashboard},
     },
     {
         defaultNavigationOptions: ({ navigation }) => {
@@ -35,22 +38,86 @@ const DashboardStackNavigator = createStackNavigator(
     }
 );
 
+// TRAINER
+const AthleteProfileStackNavigator = createStackNavigator( {
+    AthleteProfileScreen: {
+        screen: AthleteProfileScreen
+    },
+    defaultNavigationOptions: ({ navigation }) => {
+        const { routeName } = navigation.state;
+        return {
+            headerLeft: (
+                <Ionicons
+                    style={{ paddingLeft: 10 }}
+                    onPress={() => navigation.goBack()}
+                    name="md-arrow-back"
+                    size={30}
+                />
+            )
+        };
+    }
+});
+
+const AthleteListStackNavigator = createStackNavigator(
+    {
+        AthleteList: {screen: AthleteListScreen},
+        TrainerAthleteProfile: {screen: AthleteProfileStackNavigator}
+    },
+    {
+        defaultNavigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                )
+            };
+        }
+    }
+);
+
+const TrainerDrawerNavigator = createDrawerNavigator( {
+   TrainerDashboard: {
+       screen: DashboardStackNavigator,
+   },
+    AthleteList: {
+       screen: AthleteListStackNavigator
+    },
+    Wyloguj: {
+       screen: LogoutComponent
+    }
+});
+
+// END TRAINER
+
+
 const AppDrawerNavigator = createDrawerNavigator( {
     Dashboard: {
-        screen: DashboardStackNavigator
+        screen: DashboardStackNavigator,
+    },
+    AthleteList: {
+        screen: AthleteListStackNavigator
+    },
+    Wyloguj: {
+        screen: LogoutComponent
     }
 });
 
 
 
-const ProfileStackNavigator = createStackNavigator(
+const WelcomeStackNavigator = createStackNavigator(
     {
         Welcome: {screen: WelcomeScreen},
         SignIn: {screen: SignIn},
         SignUp: {screen: SignUp},
     },
     {
-        defaultNavigationOptions: ({ navigation }) => {
+        navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             if ( routeName === 'Welcome') return {
 
@@ -71,11 +138,40 @@ const ProfileStackNavigator = createStackNavigator(
 
 );
 
+//Welcome -> zrobione
+    // Welcome
+    // Sign in
+    // Sign up
+//TrainerDrawerNavigator
+    // Dashboard
+    // AthleteListStackNavigator
+        // AthleteProfile
+            // Balance
+                // Różne Switch navigatory
+            // Calendar
+                // Różne Switch navigatory
+    // Dodawanie znajomych
+    // Logout
+//Athlete
+    // Dashboard
+    // TrainerList
+    // Calendars
+        // Rozne Switch navigatory
+    // Balance
+        // Rozne Switch navigatory
+    // Dodawanie znajomych
+    // Logout
+
+
+
 const AppSwitchNavigator = createSwitchNavigator({
-    Welcome: { screen: ProfileStackNavigator},
-    Dashboard: { screen: AppDrawerNavigator }
+    Welcome: { screen: WelcomeStackNavigator},
+    TrainerDashboard: { screen: TrainerDrawerNavigator },
+    // dodac athletedashoard ..
 });
 
 
-export const AppContainer = createAppContainer(AppDrawerNavigator);
+//ew dodac trainer, athlete...
+
+export const TrainerContainer = createAppContainer(TrainerDrawerNavigator);
 export const ProfileContainer = createAppContainer(AppSwitchNavigator);

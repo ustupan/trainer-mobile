@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import {AppContainer, ProfileContainer} from "./AppNavigator";
+import {ProfileContainer, TrainerContainer} from "./AppNavigator";
 import SplashScreen from "./src/screens/SplashScreen";
 import deviceStorage from "./src/api/deviceStorage";
 
@@ -25,7 +25,7 @@ export default class App extends React.Component{
       return ( <ProfileContainer/>)
     }
     else {
-      return ( <ProfileContainer/>)
+      return ( <TrainerContainer/>)
     }
   }
 }

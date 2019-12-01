@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from 'react-native-button'
-import { AppStyles } from "../../AppStyles";
+import { AppStyles } from "../../../AppStyles";
 
 
 export default class Welcome extends React.Component {

@@ -1,10 +1,9 @@
-import axios from 'axios';
+import axios from '../../../axios'
 
 
-const baseUrl = 'http://f4ddd2e2.ngrok.io';
 
 export const register = async (state) => {
-    return axios.post(`${baseUrl}/registration/user`, {
+    return axios.post(`/registration/user`, {
             "username": `${state.username}`,
             "email": `${state.email}`,
             "password": `${state.password}`,
@@ -14,7 +13,7 @@ export const register = async (state) => {
 };
 
 export const login = async (state) => {
-    return axios.post(`${baseUrl}/authenticate`, {
+    return axios.post(`/authenticate`, {
         "username": `${state.username}`,
         "password": `${state.password}`,
     });

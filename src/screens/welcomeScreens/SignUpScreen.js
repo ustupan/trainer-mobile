@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
 import Button from "react-native-button";
-import { AppStyles } from "../../AppStyles";
+import { AppStyles } from "../../../AppStyles";
 import RNPickerSelect from 'react-native-picker-select';
-import { register } from "../api/auth";
-import responseHandle from '../api/responseHandler';
+import { register } from "../../api/services/authService";
+import responseHandle from '../../api/responseHandler';
 
 
 export default class SignUp extends React.Component {

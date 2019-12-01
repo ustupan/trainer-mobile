@@ -1,16 +1,9 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity,
-    Image,
-    FlatList,
-    TextInput,
-    Alert,
-} from 'react-native';
+import {Alert, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View,} from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
-import Button from 'react-native-button'
+
+const maleAvatar = 'https://bootdey.com/img/Content/avatar/avatar7.png';
+const femaleAvatar = 'https://bootdey.com/img/Content/avatar/avatar3.png';
 
 export default class UserList extends React.Component {
 
@@ -18,28 +11,20 @@ export default class UserList extends React.Component {
         super(props);
         this.state = {
             searchUsername: "",
-            data: [
-                {id:'1',  username: "Mark Doe",    email:"act@o2.pl", image:"https://bootdey.com/img/Content/avatar/avatar7.png"},
-                {id:'2',  username: "Clark Man",   email:"aaa@o2.pl", image:"https://bootdey.com/img/Content/avatar/avatar6.png"} ,
-                {id:'3',  username: "Jaden Boor",  email:"aa@o2.e", image:"https://bootdey.com/img/Content/avatar/avatar5.png"} ,
-                {id:'4',  username: "Srick Tree",  email:"ad2p@.e", image:"https://bootdey.com/img/Content/avatar/avatar4.png"} ,
-                {id:'5',  username: "Erick Doe",   email:"ac@tive.com", image:"https://bootdey.com/img/Content/avatar/avatar3.png"} ,
-                {id:'6',  username: "Francis Doe", email:"activ@a2.ple", image:"https://bootdey.com/img/Content/avatar/avatar2.png"} ,
-                {id:'8',  username: "Matilde Doe", email:"akowal@o2.pl", image:"https://bootdey.com/img/Content/avatar/avatar1.png"} ,
-                {id:'9',  username: "John Doe",    email:"ac2g@gmail.e", image:"https://bootdey.com/img/Content/avatar/avatar4.png"} ,
-                {id:'10', username: "Fermod Doe",  email:"actl@o.pl", image:"https://bootdey.com/img/Content/avatar/avatar7.png"} ,
-                {id:'11', username: "Danny Doe",   email:"actaa@.ve", image:"https://bootdey.com/img/Content/avatar/avatar1.png"},
-            ]
         };
     }
 
-    //userClickEventListiner = this.props.userClickEventListiner(item);
-    //removeButtonClickEventListiner = this.props.removeButtonClickEventListiner(item);
+    dataToListMapper(){
+        return this.props.data.map((el) => {
+            return {
+                id: el.id.toString(),
+                username: el.userName,
+                email: el.email,
+                image: el.gender === 'man' ? maleAvatar : femaleAvatar
+            }
+        });
+    }
 
-
-    cardClickEventListener = () => {
-        Alert.alert('b');
-    };
 
     tagClickEventListener = () => {
         Alert.alert('a');
@@ -48,7 +33,7 @@ export default class UserList extends React.Component {
 
     renderItem = ({item}) => {
         return (
-            <TouchableOpacity onPress={() => {this.cardClickEventListener()}}>
+            <TouchableOpacity onPress={() => {this.props.onUserClick(item.id)}}>
                 <View style={styles.row}>
                     <Image source={{ uri: item.image }} style={styles.pic} />
                     <View>
@@ -58,7 +43,9 @@ export default class UserList extends React.Component {
                                 <Text>Usuń</Text>
                             </TouchableOpacity>
                         </View>
-
+                        <View style={styles.msgContainer}>
+                            <Text style={styles.msgTxt}>{item.email}</Text>
+                        </View>
                     </View>
                 </View>
 
@@ -87,7 +74,7 @@ export default class UserList extends React.Component {
 
                 <FlatList
                     extraData={this.state}
-                    data={this.state.searchUsername === '' ? this.state.data: this.state.data.filter((value) => value.username.toUpperCase().includes(this.state.searchUsername.toUpperCase()))}
+                    data={this.state.searchUsername === '' ? this.dataToListMapper(): this.dataToListMapper().filter((value) => value.username.toUpperCase().includes(this.state.searchUsername.toUpperCase()))}
                     keyExtractor = {(item) => {
                         return item.id;
                     }}

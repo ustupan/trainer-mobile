@@ -1,9 +1,5 @@
-import axios from "axios";
-import {getItem} from "./deviceStorage";
-import responseHandle from "./responseHandler";
-
-const baseUrl = 'http://f4ddd2e2.ngrok.io';
-
+import axios from '../../../axios'
+import responseHandle from "../responseHandler";
 
 
 const trainerService = {
@@ -11,12 +7,12 @@ const trainerService = {
     async getTrainerAthletes(jwt) {
         try {
             const header = `Authorization: Bearer ${jwt}`;
-             const response = await axios.get(`${baseUrl}/trainer/athleteList`, {
+             const response = await axios.get(`/trainer/athleteList`, {
                  headers: { Authorization: `Bearer ${jwt}` }
              });
             if (response !== null) {
                 this.setState({
-                    athleteList: response,
+                    athleteList: response.data,
                     loading: false
                 });
             } else {
