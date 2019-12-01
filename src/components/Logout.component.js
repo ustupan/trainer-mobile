@@ -1,6 +1,8 @@
 import React from 'react';
 import deviceStorage from "../api/deviceStorage";
 
+import Button from "react-native-button";
+
 class LogoutComponent extends React.Component {
 
     constructor(props) {
@@ -12,7 +14,11 @@ class LogoutComponent extends React.Component {
     }
 
     render() {
-        return null;
-    }
+        return (
+            <Button
+                title={"Press me"}
+
+            />
+        )}
 }
 export default LogoutComponent;

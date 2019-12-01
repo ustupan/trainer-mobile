@@ -13,7 +13,14 @@ import Dashboard from "./src/screens/DashboardScreen";
 import AthleteListScreen from "./src/screens/trainerScreens/AthleteListScreen";
 import LogoutComponent from "./src/components/Logout.component";
 import AthleteProfileScreen from "./src/screens/trainerScreens/AthleteProfileScreen";
-
+import {CustomTrainerDrawer} from "./src/components/drawerNavigator/CustomTrainerDrawer";
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    Image
+} from "react-native";
 
 
 const DashboardStackNavigator = createStackNavigator(
@@ -21,7 +28,7 @@ const DashboardStackNavigator = createStackNavigator(
         Dashboard: {screen: Dashboard},
     },
     {
-        defaultNavigationOptions: ({ navigation }) => {
+        navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
                 title: routeName,
@@ -31,6 +38,13 @@ const DashboardStackNavigator = createStackNavigator(
                         onPress={() => navigation.openDrawer()}
                         name="md-menu"
                         size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-home"
+                        size={30}
+                        color={tintColor}
                     />
                 )
             };
@@ -81,16 +95,25 @@ const AthleteListStackNavigator = createStackNavigator(
     }
 );
 
-const TrainerDrawerNavigator = createDrawerNavigator( {
-   TrainerDashboard: {
-       screen: DashboardStackNavigator,
-   },
-    AthleteList: {
-       screen: AthleteListStackNavigator
+const TrainerDrawerNavigator = createDrawerNavigator({
+    TrainerDashboard: {
+        screen: DashboardStackNavigator,
     },
-    Wyloguj: {
-       screen: LogoutComponent
-    }
+    AthleteList: {
+        screen: AthleteListStackNavigator
+    },
+},
+    {
+        initialRouteName: 'TrainerDashboard',
+        drawerPosition: 'left',
+        contentComponent: CustomTrainerDrawer,
+        drawerOpenRoute: 'DrawerOpen',
+        drawerCloseRoute: 'DrawerClose',
+        drawerToggleRoute: 'DrawerToggle',
+        contentOptions: {
+            activeTintColor: '#ff5a66'
+        }
+
 });
 
 // END TRAINER
