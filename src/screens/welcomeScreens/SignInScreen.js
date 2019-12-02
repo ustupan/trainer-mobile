@@ -19,20 +19,15 @@ class SignIn extends React.Component {
         };
     }
 
-
-
     getJwtRoles = (jwt) => {
         let decoded = jwt_decode(jwt);
-        return JSON.stringify(decoded['role']);
+        return decoded['role'];
     };
 
 
     onValid = () => {
         const username = this.state.username;
         const password = this.state.password;
-        const confirmPassword = this.state.confirmPassword;
-        const email = this.state.email;
-        const role = this.state.roleName;
 
         if (username === undefined || username === '') throw {message: "Nazwa użytkownika jest wymagana!" };
 
@@ -44,17 +39,18 @@ class SignIn extends React.Component {
     signIn = async () => {
         try {
             this.onValid();
-            const response = await login(this.state);
+            login(this.state).then((response) => {
+                saveItem('jwt',response.headers['authorization']);
+                if (this.getJwtRoles(response.headers['authorization']).filter((role) => role.includes('Athlete'))) this.props.navigation.navigate('TrainerDashboard'); //athlete
+                else this.props.navigation.navigate('TrainerDashboard'); //trainer
+            })
+                .catch((er)=>{
+                   throw er;
+                });
 
-            await saveItem('jwt',response.headers['authorization']).then(() => {
-                let roles = this.getJwtRoles(response.headers['authorization']);
-                saveItem('roles', roles).then(() => {
-                    if (roles.filter((role) => role.includes('Athlete'))) this.props.navigation.navigate('TrainerDashboard');  // zmienic athlete dashboard
-                    else this.props.navigation.navigate('TrainerDashboard');
-                })
-            });
-            //await saveItem('jwt',response.headers['authorization']).then(()=> saveItem('roles', this.getJwtRoles(response.headers['authorization'])));
-            //await this.props.navigation.navigate('Dashboard');
+            // to musi najpierw zwrocic...
+
+
             Alert.alert('Pomyślnie zalogowano!');
         } catch (err) {
             responseHandle(err);

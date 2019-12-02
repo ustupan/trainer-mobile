@@ -11,6 +11,7 @@ import { DrawerItems } from 'react-navigation';
 import LogoutComponent from "../Logout.component";
 
 export const CustomTrainerDrawer = (props) => {
+
     return (
         <Container>
             <Header style={styles.drawerHeader}>
@@ -24,7 +25,7 @@ export const CustomTrainerDrawer = (props) => {
                 <DrawerItems {...props} />
             </Content>
             <Footer>
-                <LogoutComponent></LogoutComponent>
+                <LogoutComponent {...props}/>
             </Footer>
         </Container>
     )

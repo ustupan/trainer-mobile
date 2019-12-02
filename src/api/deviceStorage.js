@@ -1,7 +1,4 @@
 import { AsyncStorage } from 'react-native';
-import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-
-
 
 export const saveItem = async (key, value) => {
 
@@ -9,22 +6,11 @@ export const saveItem = async (key, value) => {
         jwt = jwt.replace("Bearer","");
         return jwt;
     };
-
     try {
         if(key === 'jwt') value = adjustJwt(value);
         await AsyncStorage.setItem(key, value);
     } catch (error) {
-        console.log('AsyncStorage Error: ' + error.message);
-    }
-};
-
-export const clear = async () => {
-    try {
-        await AsyncStorage.clear().then(() => {
-            console.log(getItem('jwt'));
-        });
-    } catch (error) {
-        console.log('AsyncStorage Error: ' + error.message);
+        throw error;
     }
 };
 

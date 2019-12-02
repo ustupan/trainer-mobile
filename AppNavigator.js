@@ -22,6 +22,33 @@ import {
     Image
 } from "react-native";
 
+const WelcomeStackNavigator = createStackNavigator(
+    {
+        Welcome: {screen: WelcomeScreen},
+        SignIn: {screen: SignIn},
+        SignUp: {screen: SignUp},
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            if ( routeName === 'Welcome') return {
+
+            };
+            else return {
+                title: routeName === 'SignUp' ? 'Rejestracja Konta': 'Zaloguj się do aplikacji',
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    }
+
+);
 
 const DashboardStackNavigator = createStackNavigator(
     {
@@ -57,6 +84,7 @@ const AthleteProfileStackNavigator = createStackNavigator( {
     AthleteProfileScreen: {
         screen: AthleteProfileScreen
     },
+
     defaultNavigationOptions: ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
@@ -95,13 +123,15 @@ const AthleteListStackNavigator = createStackNavigator(
     }
 );
 
+
+
 const TrainerDrawerNavigator = createDrawerNavigator({
     TrainerDashboard: {
         screen: DashboardStackNavigator,
     },
     AthleteList: {
         screen: AthleteListStackNavigator
-    },
+    }
 },
     {
         initialRouteName: 'TrainerDashboard',
@@ -117,49 +147,6 @@ const TrainerDrawerNavigator = createDrawerNavigator({
 });
 
 // END TRAINER
-
-
-const AppDrawerNavigator = createDrawerNavigator( {
-    Dashboard: {
-        screen: DashboardStackNavigator,
-    },
-    AthleteList: {
-        screen: AthleteListStackNavigator
-    },
-    Wyloguj: {
-        screen: LogoutComponent
-    }
-});
-
-
-
-const WelcomeStackNavigator = createStackNavigator(
-    {
-        Welcome: {screen: WelcomeScreen},
-        SignIn: {screen: SignIn},
-        SignUp: {screen: SignUp},
-    },
-    {
-        navigationOptions: ({ navigation }) => {
-            const { routeName } = navigation.state;
-            if ( routeName === 'Welcome') return {
-
-            };
-            else return {
-                title: routeName === 'SignUp' ? 'Rejestracja Konta': 'Zaloguj się do aplikacji',
-                headerLeft: (
-                    <Ionicons
-                        style={{ paddingLeft: 10 }}
-                        onPress={() => navigation.goBack()}
-                        name="md-arrow-back"
-                        size={30}
-                    />
-                )
-            };
-        }
-    }
-
-);
 
 //Welcome -> zrobione
     // Welcome
@@ -186,6 +173,11 @@ const WelcomeStackNavigator = createStackNavigator(
     // Logout
 
 
+const TrainerSwitchNavigator = createSwitchNavigator({
+    TrainerDashboard: { screen: TrainerDrawerNavigator },
+    Welcome: { screen: WelcomeStackNavigator},
+    // dodac athletedashoard ..
+});
 
 const AppSwitchNavigator = createSwitchNavigator({
     Welcome: { screen: WelcomeStackNavigator},
@@ -196,5 +188,5 @@ const AppSwitchNavigator = createSwitchNavigator({
 
 //ew dodac trainer, athlete...
 
-export const TrainerContainer = createAppContainer(TrainerDrawerNavigator);
+export const TrainerContainer = createAppContainer(TrainerSwitchNavigator);
 export const ProfileContainer = createAppContainer(AppSwitchNavigator);
