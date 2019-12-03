@@ -1,6 +1,5 @@
 import {
     createAppContainer,
-    createBottomTabNavigator,
     createDrawerNavigator, createStackNavigator,
     createSwitchNavigator
 } from "react-navigation";
@@ -11,6 +10,7 @@ import React from "react";
 import { Ionicons } from '@expo/vector-icons'
 import Dashboard from "./src/screens/DashboardScreen";
 import AthleteListScreen from "./src/screens/trainerScreens/AthleteListScreen";
+import TrainingPlanScreen from "./src/screens/trainerScreens/TrainingPlanScreen";
 import LogoutComponent from "./src/components/Logout.component";
 import AthleteProfileScreen from "./src/screens/trainerScreens/AthleteProfileScreen";
 import {CustomTrainerDrawer} from "./src/components/drawerNavigator/CustomTrainerDrawer";
@@ -21,6 +21,7 @@ import {
     ScrollView,
     Image
 } from "react-native";
+
 
 const WelcomeStackNavigator = createStackNavigator(
     {
@@ -80,11 +81,35 @@ const DashboardStackNavigator = createStackNavigator(
 );
 
 // TRAINER
+const TrainingPlanSwitchNavigator = createSwitchNavigator(
+    {
+        TrainingPlan: {
+            screen: TrainingPlanScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+
 const AthleteProfileStackNavigator = createSwitchNavigator(
     {
         AthleteProfileScreen: {
             screen: AthleteProfileScreen
-        },
+        }
     },
     {
         navigationOptions: ({ navigation }) => {
@@ -106,7 +131,8 @@ const AthleteProfileStackNavigator = createSwitchNavigator(
 const AthleteListStackNavigator = createStackNavigator(
     {
         AthleteList: {screen: AthleteListScreen},
-        TrainerAthleteProfile: {screen: AthleteProfileStackNavigator}
+        TrainerAthleteProfile: {screen: AthleteProfileStackNavigator},
+        TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator}
     },
     {
         navigationOptions: ({ navigation }) => {

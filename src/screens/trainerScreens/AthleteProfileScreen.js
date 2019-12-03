@@ -5,7 +5,8 @@ import {
     View,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import deviceStorage from "../../api/deviceStorage";
 import trainerService from "../../api/services/trainerService";
@@ -19,14 +20,16 @@ export default class AthleteProfileScreen extends Component {
             modalVisible:false,
             userSelected:[],
             data: [
-                {id:"1",  name: "Plan treningowy", icon:"ios-calendar"},
-                {id:"2",  name: "Rezultaty sportowca", icon:"md-trending-up"},
-            ]
+                {id:"1", value: "trainingPlan", name: "Plan treningowy", icon:"ios-calendar"},
+                {id:"2", value:"balance", name: "Rezultaty sportowca", icon:"md-trending-up"},
+            ],
+            athlete: this.props.navigation.state.params.athlete,
         };
     }
 
     clickEventListener = (item) => {
         Alert.alert('Message', 'Item clicked. '+item.name);
+        this.props.navigation.navigate('TrainingPlanSwitch');
     };
 
     render() {
@@ -38,9 +41,9 @@ export default class AthleteProfileScreen extends Component {
                                source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
 
                         <Text style={styles.name1}>
-                            John Doe
+                            {this.state.athlete.userName}
                         </Text>
-                        <Text style={styles.email}>jodowy@gmail.com</Text>
+                        <Text style={styles.email}>{this.state.athlete.email}</Text>
                     </View>
                 </View>
                 <FlatList

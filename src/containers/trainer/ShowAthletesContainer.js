@@ -33,7 +33,7 @@ export default class ShowAthletesContainer extends React.Component {
 
     athleteClickEventListener = (id) => {
         let athlete = this.getAthleteById(id);
-        this.props.navigation.navigate('TrainerAthleteProfile');
+        this.props.navigation.navigate('TrainerAthleteProfile', {athlete: athlete});
     };
 
     render() {
