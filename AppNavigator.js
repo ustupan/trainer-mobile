@@ -80,24 +80,27 @@ const DashboardStackNavigator = createStackNavigator(
 );
 
 // TRAINER
-const AthleteProfileStackNavigator = createStackNavigator( {
-    AthleteProfileScreen: {
-        screen: AthleteProfileScreen
+const AthleteProfileStackNavigator = createSwitchNavigator(
+    {
+        AthleteProfileScreen: {
+            screen: AthleteProfileScreen
+        },
     },
-
-    defaultNavigationOptions: ({ navigation }) => {
-        const { routeName } = navigation.state;
-        return {
-            headerLeft: (
-                <Ionicons
-                    style={{ paddingLeft: 10 }}
-                    onPress={() => navigation.goBack()}
-                    name="md-arrow-back"
-                    size={30}
-                />
-            )
-        };
-    }
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
 });
 
 const AthleteListStackNavigator = createStackNavigator(
@@ -106,7 +109,7 @@ const AthleteListStackNavigator = createStackNavigator(
         TrainerAthleteProfile: {screen: AthleteProfileStackNavigator}
     },
     {
-        defaultNavigationOptions: ({ navigation }) => {
+        navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
                 title: routeName,
@@ -116,6 +119,13 @@ const AthleteListStackNavigator = createStackNavigator(
                         onPress={() => navigation.openDrawer()}
                         name="md-menu"
                         size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-list-box"
+                        size={30}
+                        color={tintColor}
                     />
                 )
             };

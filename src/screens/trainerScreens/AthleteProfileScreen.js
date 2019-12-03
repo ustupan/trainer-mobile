@@ -4,9 +4,30 @@ import {
     Text,
     View,
     Image,
+    FlatList,
+    TouchableOpacity
 } from 'react-native';
+import deviceStorage from "../../api/deviceStorage";
+import trainerService from "../../api/services/trainerService";
+import {Ionicons} from "@expo/vector-icons";
 
 export default class AthleteProfileScreen extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            modalVisible:false,
+            userSelected:[],
+            data: [
+                {id:"1",  name: "Plan treningowy", icon:"ios-calendar"},
+                {id:"2",  name: "Rezultaty sportowca", icon:"md-trending-up"},
+            ]
+        };
+    }
+
+    clickEventListener = (item) => {
+        Alert.alert('Message', 'Item clicked. '+item.name);
+    };
 
     render() {
         return (
@@ -16,124 +37,97 @@ export default class AthleteProfileScreen extends Component {
                         <Image style={styles.avatar}
                                source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
 
-                        <Text style={styles.name}>
+                        <Text style={styles.name1}>
                             John Doe
                         </Text>
+                        <Text style={styles.email}>jodowy@gmail.com</Text>
                     </View>
                 </View>
-
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/facebook-like/color/40/2ecc71'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/heart/office/40/2ecc71'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/bar-chart/dusk/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/shopping-cart/color/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/product/nolan/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/shopping-basket/color/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/notification/dusk/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/profile/color/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                        <View style={styles.menuBox}>
-                            <Image style={styles.icon} source={{uri: 'https://png.icons8.com/friends/color/50/ffffff'}}/>
-                            <Text style={styles.info}>Icon</Text>
-                        </View>
-
-                    </View>
-                </View>
+                <FlatList
+                    style={styles.contentList}
+                    columnWrapperStyle={styles.listContainer}
+                    data={this.state.data}
+                    keyExtractor= {(item) => {
+                        return item.id;
+                    }}
+                    renderItem={({item}) => {
+                        return (
+                            <TouchableOpacity style={styles.card} onPress={() => {this.clickEventListener(item)}}>
+                                <Ionicons style = {{color: "#ff5a66", padding: 10}}
+                                          name={item.icon}
+                                          size={60} />
+                                <View>
+                                    <Text style={styles.name}>{item.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}}/>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    header:{
-        backgroundColor: "#00BFFF",
+    container:{
+        flex:1,
+        marginTop:20,
+        marginBottom: 100,
+        backgroundColor:"#ffffff"
     },
     headerContent:{
         padding:30,
         alignItems: 'center',
+    },
+    header:{
+        backgroundColor: "#ffffff",
     },
     avatar: {
         width: 130,
         height: 130,
         borderRadius: 63,
         borderWidth: 4,
-        borderColor: "white",
+        borderColor: "#ff5a6f",
         marginBottom:10,
     },
-    name:{
-        fontSize:22,
-        color:"#FFFFFF",
-        fontWeight:'600',
+    contentList:{
+        flex:1,
     },
-    body: {
-        flex: 1,
-        alignItems: 'center',
-        padding:30,
-    },
-    textInfo:{
-        fontSize:18,
-        marginTop:20,
-        color: "#696969",
-    },
-    bodyContent:{
-        paddingTop:40,
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-    },
-    menuBox:{
-        backgroundColor: "#DCDCDC",
-        width:100,
-        height:100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin:12,
-        shadowColor: 'black',
-        shadowOpacity: .2,
+    card:{
+        shadowColor: '#00000021',
         shadowOffset: {
-            height:2,
-            width:-2
+            width: 0,
+            height: 6,
         },
-        elevation:4,
+        shadowOpacity: 1.37,
+        shadowRadius: 7.49,
+        elevation: 12,
+
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop:20,
+        backgroundColor:"white",
+        padding: 10,
+        flexDirection:'row',
+        borderRadius:10,
     },
-    icon: {
-        width:60,
-        height:60,
+
+    name:{
+        fontSize:18,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:30,
+        color:"#ff5a66",
+        fontWeight:'bold'
     },
-    info:{
-        fontSize:22,
-        color: "#696969",
+    name1:{
+        fontSize:25,
+        color:"#ff5a66",
+        fontWeight:'600',
+        marginBottom: 5
+    },
+    email:{
+        fontSize:12,
+        color:"#ff5a66",
+        fontWeight:'600',
     }
 });
