@@ -21,6 +21,7 @@ import {
     ScrollView,
     Image
 } from "react-native";
+import BalanceScreen from "./src/screens/balanceScreens/BalanceScreen";
 
 
 const WelcomeStackNavigator = createStackNavigator(
@@ -104,6 +105,29 @@ const TrainingPlanSwitchNavigator = createSwitchNavigator(
         }
     });
 
+const BalanceSwitchNavigator = createSwitchNavigator(
+    {
+        Balance: {
+            screen: BalanceScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
 
 const AthleteProfileStackNavigator = createSwitchNavigator(
     {
@@ -132,7 +156,8 @@ const AthleteListStackNavigator = createStackNavigator(
     {
         AthleteList: {screen: AthleteListScreen},
         TrainerAthleteProfile: {screen: AthleteProfileStackNavigator},
-        TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator}
+        TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator},
+        BalanceSwitch: {screen: BalanceSwitchNavigator}
     },
     {
         navigationOptions: ({ navigation }) => {
