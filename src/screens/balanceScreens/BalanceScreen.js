@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Picker, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Picker, StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import SplashScreen from "../SplashScreen";
+import LineChartComponent from "../../components/balance/LineChartComponent";
 
 
 const testData = [
@@ -34,7 +35,7 @@ export default class BalanceScreen extends Component {
             dateTo:""
         };
         this.setLoadingFalse = this.setLoadingFalse.bind(this);
-        this.setSettingsTrue = this.setSettingsTrue().bind(this);
+        this.setSettingsTrue = this.setSettingsTrue.bind(this);
     }
 
     getBest10(data) {
@@ -47,48 +48,62 @@ export default class BalanceScreen extends Component {
 
 
     clickEventListener = () => {
-        this.setState({loading:true});
+        if(!this.state.charType){
+            Alert.alert('Wybierz rodzaj wykresu!');
+            return null;
+        }
+        if(!this.state.selected) {
+            Alert.alert('Wybierz rodzaj danych!');
+            return null;
+        }
+
         if(this.state.dateTo){
+            this.setState({loading:true});
             this.setState({chartData: this.state.data.filter((el) => {
                 return new Date(el.resultDate) < new Date(this.state.dateTo);
-                })});
+                })}, () => {
+                    this.setState({loading:false});
+                });
             if(this.state.dateFrom){
+                this.setState({loading:true});
                 this.setState({chartData: this.state.data.filter((el) => {
                         return new Date(el.resultDate) > new Date(this.state.dateFrom);
-                    })});
+                    })}, () => {
+                        this.setState({loading:false});
+                    });
             }
         }
         else {
             if(this.state.dateFrom) {
+                this.setState({loading:true});
                 this.setState({
                     chartData: this.state.data.filter((el) => {
                         return new Date(el.resultDate) > new Date(this.state.dateFrom);
-                    })
+                    }, () => {
+                            this.setState({loading:false});
+                        })
                 });
             }
         }
 
         if (this.state.selected === '10best'){
+            this.setState({loading:true});
             this.setState({
                 chartData: this.getBest10(this.state.chartData)
-            })
+            }, () => {
+                    this.setState({loading:false});
+                }
+            )
         }
         else if (this.state.selected === '10worst'){
+            this.setState({loading:true});
             this.setState({
                 chartData: this.getWorst10(this.state.chartData)
-            })
+            }, () => {
+                    this.setState({loading:false});
+                })
         }
-        // else if (this.state.selected === 'motivationLevel'){
-        //     this.setState({
-        //
-        //     })
-        // }
-        // else if (this.state.selected === 'dispositionLevel'){
-        //     this.setState({
-        //
-        //     })
-        // }
-
+        this.setState({settings: false});
     };
 
     setLoadingFalse(){
@@ -112,7 +127,6 @@ export default class BalanceScreen extends Component {
 
     render() {
         if(this.state.loading) return (<SplashScreen/>);
-
         if(this.state.settings) return (
             <View style={styles.container}>
                 <View style={styles.body}>
@@ -170,7 +184,6 @@ export default class BalanceScreen extends Component {
                     </View>
 
                     <View style={styles.body}>
-
                         <Picker
                             style={{width: 350, height: 150, marginBottom:20}} itemStyle={{height: 150}}
                             selectedValue={this.state.selected}
@@ -183,11 +196,15 @@ export default class BalanceScreen extends Component {
                             <Picker.Item label="Średni poziom dyspozycji" value="dispositionLevel" />
                         </Picker>
                     </View>
-                    <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => {this.clickEventListener()}}>
+                    <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
                         <Text style={styles.buttonText}>Generuj wykres</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+        );
+
+        if(this.state.charType === 'line') return (
+            <LineChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={this.state.charType}/>
         );
 
     }
@@ -226,7 +243,7 @@ const styles = StyleSheet.create({
         borderRadius:8,
         backgroundColor:'transparent'
     },
-    loginButton: {
+    button: {
         backgroundColor: "#ff5a66",
 
         shadowColor: "#808080",

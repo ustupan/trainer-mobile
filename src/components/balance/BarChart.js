@@ -21,14 +21,50 @@ export default class BarChart extends React.Component {
         this.props.setLoadingFalse();
     }
 
-
-
     render() {
         return (
-            <View>
-
+            <View style={styles.container}>
+                <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
+                    <Text style={styles.buttonText}>Powrót do ustawień</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#ffffff",
+        marginBottom: 20
+    },
+    buttonContainer: {
+        height:45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:20,
+        width:300,
+        borderRadius:8,
+        backgroundColor:'transparent'
+    },
+    button: {
+        backgroundColor: "#ff5a66",
+
+        shadowColor: "#808080",
+        shadowOffset: {
+            width: 0,
+            height: 9,
+        },
+        shadowOpacity: 0.50,
+        shadowRadius: 12.35,
+
+        elevation: 19,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: '600'
+    },
+});
