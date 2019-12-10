@@ -4,40 +4,31 @@ import LineChart from "react-native-chart-kit/src/line-chart";
 import BarChart from "react-native-chart-kit/src/bar-chart";
 const screenWidth = Dimensions.get("window").width;
 
-
-
 const chartConfig = {
     backgroundColor: '#ffffff',
     backgroundGradientFrom: '#ffffff',
     backgroundGradientTo: '#ffffff',
     color: (opacity = 1) => `#ff5a66`,
-    propsForBackgroundLines: {
-        strokeDasharray: "",
-        color: 'red',
-    }
+
 };
 
-export default class LineChartComponent extends React.Component {
-
+export default class BarChartComponent extends React.Component {
     constructor(props) {
-
         super(props);
-
         this.state = {
             resultsData: [],
-            chartData: [],
-            barPercentage: 0.5,
+            chartData: this.props.data
         };
-
+        this.props.setLoadingFalse();
     }
 
     render() {
+        console.log(this.props.data);
         return (
             <View style={styles.container}>
                 <View style={styles.body}>
                     <Text style={styles.buttonText1}>Bieg na 100m</Text>
-                    <LineChart
-                        bezier
+                    <BarChart
                         data={{
                             labels: this.props.data.map((el)=> el.resultDate),
                             datasets: [
@@ -48,7 +39,7 @@ export default class LineChartComponent extends React.Component {
                                 }
                             ]
                         }}
-                        yAxisSuffix={"s"}
+                        yAxisLabel={'s'}
                         fromZero={false}
                         verticalLabelRotation={90}
                         width={screenWidth}
@@ -81,6 +72,11 @@ const styles = StyleSheet.create({
         borderRadius:8,
         backgroundColor:'transparent'
     },
+    buttonText1: {
+        color: '#ff5a66',
+        fontSize: 18,
+        fontWeight: '600'
+    },
     button: {
         backgroundColor: "#ff5a66",
 
@@ -96,11 +92,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 18,
-        fontWeight: '600'
-    },
-    buttonText1: {
-        color: '#ff5a66',
         fontSize: 18,
         fontWeight: '600'
     },
