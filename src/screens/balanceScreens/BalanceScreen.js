@@ -75,6 +75,7 @@ export default class BalanceScreen extends Component {
 
         if(this.state.dateTo){
             costam = costam.filter((el) => {
+                console.log(el.resultDate,new Date(el.resultDate) < new Date(this.state.dateTo), this.state.dateTo);
                 return new Date(el.resultDate) < new Date(this.state.dateTo);
             });
             this.setState({loading:true});
@@ -85,11 +86,11 @@ export default class BalanceScreen extends Component {
                 });
             if(this.state.dateFrom){
                 costam = costam.filter((el) => {
-                    return new Date(el.resultDate) > new Date(this.state.dateTo);
+                    return new Date(el.resultDate) > new Date(this.state.dateFrom);
                 });
                 this.setState({loading:true});
                 this.setState({chartData: this.state.data.filter((el) => {
-                        return new Date(el.resultDate) > new Date(this.state.dateFrom);
+                        return new Date(el.resultDate) > new Date(this.state.dateTo);
                     })}, () => {
                         this.setState({loading:false});
                     });
@@ -97,8 +98,9 @@ export default class BalanceScreen extends Component {
         }
         else {
             if(this.state.dateFrom) {
+                console.log("dasdasd");
                 costam = costam.filter((el) => {
-                    return new Date(el.resultDate) > new Date(this.state.dateTo);
+                    return new Date(el.resultDate) > new Date(this.state.dateFrom);
                 });
                 this.setState({loading:true});
                 this.setState({
