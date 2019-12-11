@@ -1,8 +1,8 @@
 import React from "react";
-import {View, Text, Image, StyleSheet, Dimensions,TouchableOpacity  } from "react-native";
+import {View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
-export default class ProgressChart extends React.Component {
+export default class LineChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,9 +24,7 @@ export default class ProgressChart extends React.Component {
     render() {
         return (
             <View>
-                <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => {this.clickEventListener()}}>
-                    <Text style={styles.buttonText}>Generuj wykres</Text>
-                </TouchableOpacity>
+
             </View>
         )
     }

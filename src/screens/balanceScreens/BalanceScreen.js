@@ -1,28 +1,24 @@
 import React, {Component} from 'react';
-import {Picker, StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
+import {Picker, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import SplashScreen from "../SplashScreen";
-import LineChartComponent from "../../components/balance/LineChartComponent";
-import BarChartComponent from "../../components/balance/BarChartComponent";
-import PieChartComponent from "../../components/balance/PieChartComponent";
-
 
 
 const testData = [
-    {"id":"1","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 5, "resultDate": "2019-06-21", "dispositionLevel": 4 },
-    {"id":"2","discipline":"100m run","description":"lorem ipsum","value":"9.1", "unit": "s", "motivationLevel": 4, "resultDate": "2019-06-21", "dispositionLevel": 5 },
-    {"id":"3","discipline":"100m run","description":"lorem ipsum","value":"11.8", "unit": "s", "motivationLevel": 5, "resultDate": "2019-07-06", "dispositionLevel": 4 },
-    {"id":"4","discipline":"100m run","description":"lorem ipsum","value":"11.1", "unit": "s", "motivationLevel": 4, "resultDate": "2019-08-11", "dispositionLevel": 2 },
-    {"id":"5","discipline":"100m run","description":"lorem ipsum","value":"12.5", "unit": "s", "motivationLevel": 3, "resultDate": "2019-09-20", "dispositionLevel": 3 },
-    {"id":"6","discipline":"100m run","description":"lorem ipsum","value":"12.4", "unit": "s", "motivationLevel": 2, "resultDate": "2019-10-27", "dispositionLevel": 3 },
-    {"id":"7","discipline":"100m run","description":"lorem ipsum","value":"10.2", "unit": "s", "motivationLevel": 3, "resultDate": "2019-10-29", "dispositionLevel": 3 },
-    {"id":"8","discipline":"100m run","description":"lorem ipsum","value":"9.7", "unit": "s", "motivationLevel": 2, "resultDate": "2019-11-10", "dispositionLevel": 2 },
-    {"id":"9","discipline":"100m run","description":"lorem ipsum","value":"9.2", "unit": "s", "motivationLevel": 4, "resultDate": "2019-11-19","dispositionLevel": 5 },
-    {"id":"10","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 1, "resultDate": "2019-11-29", "dispositionLevel": 2 },
+    {"id":"1","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 10, "resultDate": "2019-06-21", "dispositionLevel": 4 },
+    {"id":"2","discipline":"100m run","description":"lorem ipsum","value":"9.1", "unit": "s", "motivationLevel": 9, "resultDate": "2019-06-21", "dispositionLevel": 5 },
+    {"id":"3","discipline":"100m run","description":"lorem ipsum","value":"9.8", "unit": "s", "motivationLevel": 5, "resultDate": "2019-07-06", "dispositionLevel": 4 },
+    {"id":"4","discipline":"100m run","description":"lorem ipsum","value":"11.1", "unit": "s", "motivationLevel": 1, "resultDate": "2019-08-11", "dispositionLevel": 2 },
+    {"id":"5","discipline":"100m run","description":"lorem ipsum","value":"10.5", "unit": "s", "motivationLevel": 4, "resultDate": "2019-09-20", "dispositionLevel": 3 },
+    {"id":"6","discipline":"100m run","description":"lorem ipsum","value":"10.4", "unit": "s", "motivationLevel": 5, "resultDate": "2019-10-27", "dispositionLevel": 3 },
+    {"id":"7","discipline":"100m run","description":"lorem ipsum","value":"10.2", "unit": "s", "motivationLevel": 8, "resultDate": "2019-10-29", "dispositionLevel": 3 },
+    {"id":"8","discipline":"100m run","description":"lorem ipsum","value":"10.7", "unit": "s", "motivationLevel": 7, "resultDate": "2019-11-10", "dispositionLevel": 2 },
+    {"id":"9","discipline":"100m run","description":"lorem ipsum","value":"9.2", "unit": "s", "motivationLevel": 8, "resultDate": "2019-11-19","dispositionLevel": 5 },
+    {"id":"10","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 7, "resultDate": "2019-11-29", "dispositionLevel": 2 },
     {"id":"111","discipline":"100m run","description":"lorem ipsum","value":"9.5", "unit": "s", "motivationLevel": 5, "resultDate": "2019-12-1", "dispositionLevel": 4 },
 ];
 
-let costam = [];
+
 export default class BalanceScreen extends Component {
 
     constructor(props) {
@@ -35,125 +31,64 @@ export default class BalanceScreen extends Component {
             chartData : [],
             selected: "",
             dateFrom:"",
-            dateTo:"",
-            barData: [],
-            lineData: [],
-            pieDataMotivation: [],
-            pieDataDisposition: [],
-            discipline: '100m run'
+            dateTo:""
         };
         this.setLoadingFalse = this.setLoadingFalse.bind(this);
-        this.setSettingsTrue = this.setSettingsTrue.bind(this);
+        this.setSettingsTrue = this.setSettingsTrue().bind(this);
     }
 
     getBest10(data) {
-        return data.sort((a, b) => {
-            if (parseFloat(a.value) > parseFloat( b.value)) return 1;
-            else return -1;
-        }).slice(0,5);
+        return data.sort((a, b) => a.value > b.value).slice(0,10);
     }
 
     getWorst10(data) {
-        return data.sort((a, b) => {
-            if (parseFloat(a.value) < parseFloat( b.value)) return 1;
-            else return -1;
-        }).slice(0,5);
+        return data.sort((a, b) => a.value < b.value).slice(0,10);
     }
 
 
     clickEventListener = () => {
-        costam = testData;
-
-        if(!this.state.charType){
-            Alert.alert('Wybierz rodzaj wykresu!');
-            return null;
-        }
-        if(!this.state.selected) {
-            Alert.alert('Wybierz rodzaj danych!');
-            return null;
-        }
-
+        this.setState({loading:true});
         if(this.state.dateTo){
-            costam = costam.filter((el) => {
-                return new Date(el.resultDate) < new Date(this.state.dateTo);
-            });
-            this.setState({loading:true});
             this.setState({chartData: this.state.data.filter((el) => {
                 return new Date(el.resultDate) < new Date(this.state.dateTo);
-                })}, () => {
-                    this.setState({loading:false});
-                });
+                })});
             if(this.state.dateFrom){
-                costam = costam.filter((el) => {
-                    return new Date(el.resultDate) > new Date(this.state.dateTo);
-                });
-                this.setState({loading:true});
                 this.setState({chartData: this.state.data.filter((el) => {
                         return new Date(el.resultDate) > new Date(this.state.dateFrom);
-                    })}, () => {
-                        this.setState({loading:false});
-                    });
+                    })});
             }
         }
         else {
             if(this.state.dateFrom) {
-                costam = costam.filter((el) => {
-                    return new Date(el.resultDate) > new Date(this.state.dateTo);
-                });
-                this.setState({loading:true});
                 this.setState({
                     chartData: this.state.data.filter((el) => {
                         return new Date(el.resultDate) > new Date(this.state.dateFrom);
-                    }, () => {
-                            this.setState({loading:false});
-                        })
+                    })
                 });
             }
         }
 
         if (this.state.selected === '10best'){
-            costam = this.getBest10(costam);
-            this.setState({loading:true});
             this.setState({
                 chartData: this.getBest10(this.state.chartData)
-            }, () => {
-                    this.setState({loading:false});
-                }
-            )
-        }
-        else if (this.state.selected === '10worst'){
-            costam = this.getWorst10(costam);
-            this.setState({loading:true});
-            this.setState({
-                chartData: this.getWorst10(this.state.chartData)
-            }, () => {
-                    this.setState({loading:false});
-
-                })
-        }
-        else {
-            this.setState({loading:true});
-            this.setState({
-                chartData: this.state.chartData
-            }, () => {
-                this.setState({loading:false});
-
             })
         }
+        else if (this.state.selected === '10worst'){
+            this.setState({
+                chartData: this.getWorst10(this.state.chartData)
+            })
+        }
+        // else if (this.state.selected === 'motivationLevel'){
+        //     this.setState({
+        //
+        //     })
+        // }
+        // else if (this.state.selected === 'dispositionLevel'){
+        //     this.setState({
+        //
+        //     })
+        // }
 
-        // this.state.pieDataMotivation = this.state.chartData.map((el, i)=>{
-        //    return (
-        //        {
-        //            name: el.motivationLevel.toString(),
-        //            motivation: ,
-        //            color: colors[i],
-        //            legendFontColor: "#7F7F7F",
-        //            legendFontSize: 15
-        //        }
-        //    )
-        // });
-
-        this.setState({settings: false});
     };
 
     setLoadingFalse(){
@@ -177,6 +112,7 @@ export default class BalanceScreen extends Component {
 
     render() {
         if(this.state.loading) return (<SplashScreen/>);
+
         if(this.state.settings) return (
             <View style={styles.container}>
                 <View style={styles.body}>
@@ -188,6 +124,8 @@ export default class BalanceScreen extends Component {
                         <Picker.Item label="Wybierz rodzaj wykresu..." value="" />
                         <Picker.Item label="Liniowy" value="line" />
                         <Picker.Item label="Słupkowy" value="bar" />
+                        <Picker.Item label="Kołowy" value="pie" />
+                        <Picker.Item label="Postępu" value="progress" />
                     </Picker>
                     <Text style={{padding:5, fontSize: 18}}>Okres rezultatów</Text>
                     <View style={styles.bodyContent}>
@@ -232,30 +170,25 @@ export default class BalanceScreen extends Component {
                     </View>
 
                     <View style={styles.body}>
+
                         <Picker
                             style={{width: 350, height: 150, marginBottom:20}} itemStyle={{height: 150}}
                             selectedValue={this.state.selected}
                             onValueChange={(select) => this.setState({selected: select})}>
                             <Picker.Item label={"Wybierz rodzaj danych..."} value={""} />
                             <Picker.Item label={"Wszystkie"} value={"all"} />
-                            <Picker.Item label="5 najlepszych" value="10best" />
-                            <Picker.Item label="5 najgorszych" value="10worst" />
+                            <Picker.Item label="10 najlepszych" value="10best" />
+                            <Picker.Item label="10 najgorszych" valu="10worst" />
+                            <Picker.Item label="Średni poziom motywacji" value="motivationLevel" />
+                            <Picker.Item label="Średni poziom dyspozycji" value="dispositionLevel" />
                         </Picker>
                     </View>
-                    <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
+                    <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => {this.clickEventListener()}}>
                         <Text style={styles.buttonText}>Generuj wykres</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         );
-
-        if(this.state.charType === 'line') return (
-            <LineChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={costam}/>
-        );
-        if(this.state.charType === 'bar') return (
-            <BarChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={costam}/>
-        );
-
 
     }
 }
@@ -293,7 +226,7 @@ const styles = StyleSheet.create({
         borderRadius:8,
         backgroundColor:'transparent'
     },
-    button: {
+    loginButton: {
         backgroundColor: "#ff5a66",
 
         shadowColor: "#808080",
