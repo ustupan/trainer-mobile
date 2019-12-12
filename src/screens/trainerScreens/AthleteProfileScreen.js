@@ -28,8 +28,8 @@ export default class AthleteProfileScreen extends Component {
     }
 
     clickEventListener = (item) => {
-        Alert.alert('Message', 'Item clicked. '+item.name);
-        this.props.navigation.navigate('BalanceSwitch');
+        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('BalanceSwitch');
+        else this.props.navigation.navigate('TrainingPlanSwitch');
     };
 
     render() {

@@ -11,56 +11,6 @@ const chartConfig = {
 
 };
 
-const colors = [
-    {color: "rgba(131, 167, 234, 1)"},
-    {color: "rgb(226,234,87)"},
-    {color: "rgb(234,44,0)"},
-    {color: "rgb(234,25,144)"},
-    {color: "rgb(92,234,44)"},
-    {color: "rgb(0,234,172)"},
-    {color: "rgb(234,87,169)"},
-    {color: "rgb(96,19,10)"},
-    {color: "rgb(96,94,13)"},
-    {color: "rgb(95,35,96)"},
-];
-
-const data = [
-    {
-        name: "Seoul",
-        population: 21500000,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Toronto",
-        population: 2800000,
-        color: "#F00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Beijing",
-        population: 527612,
-        color: "red",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "New York",
-        population: 0,
-        color: "#ffffff",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Moscow",
-        population: 11920000,
-        color: "rgb(0, 0, 255)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    }
-];
 
 
 export default class PieChartComponent extends React.Component {
@@ -79,14 +29,15 @@ export default class PieChartComponent extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.body}>
+                    <Text style={styles.buttonText1}>{this.props.name}</Text>
                     <PieChart
-                        data={data}
+                        data={this.props.data}
                         width={screenWidth}
-                        height={230}
+                        height={240}
                         chartConfig={chartConfig}
                         accessor= "population"
                         backgroundColor= "transparent"
-                        absolute
+
                         style={{marginBottom: 200}}
                     />
                     <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.props.setSettingsTrue()}}>
@@ -103,7 +54,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#ffffff",
-        marginTop: 180
+        marginTop: 100
     },
     buttonContainer: {
         height:45,
@@ -132,6 +83,12 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         fontWeight: '600'
+    },
+    buttonText1: {
+        color: '#ff5a66',
+        fontSize: 25,
+        fontWeight: '800',
+        marginBottom: 40
     },
     body: {
         flex: 1,

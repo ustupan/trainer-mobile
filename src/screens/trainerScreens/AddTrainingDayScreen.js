@@ -7,35 +7,8 @@ import BarChartComponent from "../../components/balance/BarChartComponent";
 import PieChartComponent from "../../components/balance/PieChartComponent";
 
 
-
-const testData = [
-    {"id":"1","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 5, "resultDate": "2019-06-21", "dispositionLevel": 4 },
-    {"id":"2","discipline":"100m run","description":"lorem ipsum","value":"9.1", "unit": "s", "motivationLevel": 4, "resultDate": "2019-06-23", "dispositionLevel": 5 },
-    {"id":"3","discipline":"100m run","description":"lorem ipsum","value":"11.8", "unit": "s", "motivationLevel": 5, "resultDate": "2019-07-06", "dispositionLevel": 4 },
-    {"id":"4","discipline":"100m run","description":"lorem ipsum","value":"11.1", "unit": "s", "motivationLevel": 4, "resultDate": "2019-08-11", "dispositionLevel": 2 },
-    {"id":"5","discipline":"100m run","description":"lorem ipsum","value":"12.5", "unit": "s", "motivationLevel": 3, "resultDate": "2019-09-20", "dispositionLevel": 3 },
-    {"id":"6","discipline":"100m run","description":"lorem ipsum","value":"12.4", "unit": "s", "motivationLevel": 2, "resultDate": "2019-10-27", "dispositionLevel": 3 },
-    {"id":"7","discipline":"100m run","description":"lorem ipsum","value":"10.2", "unit": "s", "motivationLevel": 3, "resultDate": "2019-10-29", "dispositionLevel": 3 },
-    {"id":"8","discipline":"100m run","description":"lorem ipsum","value":"9.7", "unit": "s", "motivationLevel": 2, "resultDate": "2019-11-10", "dispositionLevel": 2 },
-    {"id":"9","discipline":"100m run","description":"lorem ipsum","value":"9.2", "unit": "s", "motivationLevel": 4, "resultDate": "2019-11-19","dispositionLevel": 5 },
-    {"id":"10","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 1, "resultDate": "2019-11-29", "dispositionLevel": 2 },
-    {"id":"111","discipline":"100m run","description":"lorem ipsum","value":"9.5", "unit": "s", "motivationLevel": 5, "resultDate": "2019-12-1", "dispositionLevel": 4 },
-];
-const colors = [
-    {color: "rgb(192,20,42)"},
-    {color: "rgb(86,0,3)"},
-    {color: "rgb(234,106,105)"},
-    {color: "rgb(255,194,177)"},
-    {color: "rgba(179,17,0,0.72)"},
-    {color: "rgb(0,234,172)"},
-    {color: "rgb(234,87,169)"},
-    {color: "rgb(96,19,10)"},
-    {color: "rgb(96,94,13)"},
-    {color: "rgb(95,35,96)"},
-];
-
 let resultData = [];
-export default class BalanceScreen extends Component {
+export default class AddTrainingDayScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -43,7 +16,6 @@ export default class BalanceScreen extends Component {
             loading: false,
             settings: true,
             chartType: "",
-            data: testData,
             selected: "",
             dateFrom:"",
             dateTo:"",
