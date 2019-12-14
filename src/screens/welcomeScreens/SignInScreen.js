@@ -4,19 +4,22 @@ import Button from "react-native-button";
 import { AppStyles } from "../../../AppStyles";
 import {login} from "../../api/services/authService";
 import {saveItem} from "../../api/deviceStorage"
+import deviceStorage from "../../api/deviceStorage";
 import jwt_decode from 'jwt-decode';
 import responseHandle from "../../api/responseHandler";
 import {getItem} from "../../api/deviceStorage";
+import SplashScreen from "../SplashScreen";
 
 
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
+            loading: false,
             username: "",
             password: "",
         };
+        this.saveItem = deviceStorage.saveItem.bind(this);
     }
 
     getJwtRoles = (jwt) => {
@@ -40,24 +43,25 @@ class SignIn extends React.Component {
         try {
             this.onValid();
             login(this.state).then((response) => {
-                saveItem('jwt',response.headers['authorization']);
-                if (this.getJwtRoles(response.headers['authorization']).filter((role) => role.includes('Athlete'))) this.props.navigation.navigate('TrainerDashboard'); //athlete
+                console.log(this.state);
+                this.saveItem('jwt',response.headers['authorization']);
+                if (this.getJwtRoles(response.headers['authorization']).filter((role) => role.includes('ATHLETE')).length > 0) this.props.navigation.navigate('AthleteDashboard'); //athlete
                 else this.props.navigation.navigate('TrainerDashboard'); //trainer
             })
                 .catch((er)=>{
+                    Alert.alert('Podano nieprawidłowe dane!');
                    throw er;
                 });
 
-            // to musi najpierw zwrocic...
-
-
-            Alert.alert('Pomyślnie zalogowano!');
         } catch (err) {
             responseHandle(err);
         }
     };
 
     render() {
+        if (this.state.loading) {
+            return <SplashScreen/>
+        }
         return (
             <View style={styles.container}>
                 <Text style={styles.title}></Text>

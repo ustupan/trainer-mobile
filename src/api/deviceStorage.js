@@ -1,4 +1,10 @@
 import { AsyncStorage } from 'react-native';
+import jwt_decode from 'jwt-decode';
+
+const getJwtRoles = (jwt) => {
+    let decoded = jwt_decode(jwt);
+    return decoded['role'];
+};
 
 export const saveItem = async (key, value) => {
 
@@ -38,7 +44,8 @@ const deviceStorage = {
             if (value !== null) {
                 this.setState({
                     jwt: value,
-                    loading: false
+                    loading: false,
+                    roles: getJwtRoles(value)
                 });
             } else {
                 this.setState({
@@ -47,6 +54,19 @@ const deviceStorage = {
             }
         } catch (error) {
             console.log('AsyncStorage Error: ' + error.message);
+        }
+    },
+
+    async saveItem(key, value) {
+        const adjustJwt = (jwt) => {
+            jwt = jwt.replace("Bearer", "");
+            return jwt;
+        };
+        try {
+            if (key === 'jwt') value = adjustJwt(value);
+            await AsyncStorage.setItem(key, value);
+        } catch (error) {
+            throw error;
         }
     }
 };

@@ -39,8 +39,8 @@ export default class UserList extends React.Component {
                     <View>
                         <View style={styles.nameContainer}>
                             <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
-                            <TouchableOpacity style={styles.msgTxt} onPress={ () => this.tagClickEventListener()}>
-                                <Text>Usuń</Text>
+                            <TouchableOpacity style={styles.deleteTxt} onPress={ () => this.tagClickEventListener()}>
+                                <Text style={{color:"#ffffff"}}>Usuń</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.msgContainer}>
@@ -64,8 +64,9 @@ export default class UserList extends React.Component {
                             size={30}
                         />
                         <TextInput style={styles.inputs}
+                                   placeholderTextColor="#ffffff"
                                    ref={'txtSearch'}
-                                   placeholder="Search"
+                                   placeholder="Wyszukaj"
                                    underlineColorAndroid='transparent'
                                    onChangeText={(username) => this.setState({searchUsername: username})}/>
                     </View>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#DCDCDC',
+        borderColor: '#ff5a66',
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         padding: 10,
@@ -119,20 +120,33 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    deleteTxt:{
+        fontWeight: '500',
+        color: '#ffffff',
+        fontSize: 12,
+        marginLeft: 75,
+        backgroundColor: "#ff5a66",
+        borderRadius: 10,
+        width: 70,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     msgTxt: {
         fontWeight: '400',
-        color: '#008B8B',
-        fontSize: 12,
+        color: '#ff5a66',
+        fontSize: 13,
         marginLeft: 15,
     },
     inputs:{
+        color:"#ffffff",
         height:45,
         marginLeft:16,
-        borderBottomColor: '#FFFFFF',
         flex:1,
     },
     inputIcon:{
         marginLeft:15,
+        color:"#ffffff",
         justifyContent: 'center'
     },
     formContent:{
@@ -140,10 +154,11 @@ const styles = StyleSheet.create({
         marginTop:10,
     },
     inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius:30,
-        borderBottomWidth: 1,
+
+        borderColor: '#ff5a66',
+        backgroundColor: '#ff5a66',
+        borderWidth: 2,
+        borderRadius: 5,
         height:45,
         flexDirection: 'row',
         alignItems:'center',

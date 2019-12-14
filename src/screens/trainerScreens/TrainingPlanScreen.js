@@ -48,8 +48,11 @@ export default class TrainingPlanScreen extends Component {
     }
 
     eventClickListener = (viewId) => {
-        Alert.alert("alert", "event clicked");
+        this.props.navigation.navigate('EditTrainingDaySwitch');
+    };
 
+    addTrainingDayListiner = () => {
+        this.props.navigation.navigate('AddTrainingDaySwitch');
     };
 
     render() {
@@ -80,19 +83,12 @@ export default class TrainingPlanScreen extends Component {
                             </View>
                         )}}/>
                 <View style={{position: 'absolute', right: 10, bottom: 0}}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => this.addTrainingDayListiner()}>
                         <Ionicons style = {{color: "#ff5a66"}}
                                   name='md-add-circle'
                                   size={70} />
                     </TouchableOpacity>
                 </View>
-                {/*<View style={styles.footer}>*/}
-                {/*    <TouchableOpacity style={styles.btnAdd}>*/}
-                {/*        <Ionicons style = {{color: "#ff5a66"}}*/}
-                {/*                  name='md-add-circle'*/}
-                {/*                  size={60} />*/}
-                {/*    </TouchableOpacity>*/}
-                {/*</View>*/}
             </View>
         );
     }

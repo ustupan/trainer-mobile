@@ -193,12 +193,12 @@ export default class BalanceScreen extends Component {
                             style={{width: 150}}
                             date={this.state.dateFrom}
                             mode="date"
-                            placeholder="select date"
+                            placeholder="wybierz datę"
                             format="YYYY-MM-DD"
                             minDate="2019-05-01"
                             maxDate="2030-06-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
+                            confirmBtnText="Potwierdź"
+                            cancelBtnText="Anuluj"
                             showIcon={false}
                             customStyles={{
                                 dateInput: {
@@ -212,12 +212,12 @@ export default class BalanceScreen extends Component {
                             style={{width: 150}}
                             date={this.state.dateTo}
                             mode="date"
-                            placeholder="select date"
+                            placeholder="wybierz datę"
                             format="YYYY-MM-DD"
                             minDate="2019-05-01"
                             maxDate="2030-06-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
+                            confirmBtnText="Potwierdź"
+                            cancelBtnText="Anuluj"
                             showIcon={false}
                             customStyles={{
                                 dateInput: {

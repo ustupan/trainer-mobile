@@ -22,6 +22,10 @@ import {
     Image
 } from "react-native";
 import BalanceScreen from "./src/screens/balanceScreens/BalanceScreen";
+import AddTrainingDayScreen from "./src/screens/trainerScreens/AddTrainingDayScreen";
+import EditTrainingDayScreen from "./src/screens/trainerScreens/EditTrainingDayScreen";
+import InvitationScreen from "./src/screens/InvitationScreen";
+import TrainerListScreen from "./src/screens/athleteScreens/TrainerListScreen";
 
 
 const WelcomeStackNavigator = createStackNavigator(
@@ -81,6 +85,94 @@ const DashboardStackNavigator = createStackNavigator(
     }
 );
 
+const InvitationStackNavigator = createStackNavigator(
+    {
+        Invitation: {
+            screen: InvitationScreen
+        },
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-person-add"
+                        size={30}
+                        color={tintColor}
+                    />
+                )
+            };
+        }
+    }
+);
+// ATHLETE
+
+const TrainerListStackNavigator = createStackNavigator(
+    {
+        TrainerList: {screen: TrainerListScreen},
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-list-box"
+                        size={30}
+                        color={tintColor}
+                    />
+                )
+            };
+        }
+    }
+);
+
+const AthleteDrawerNavigator = createDrawerNavigator({
+        AthleteDashboard: {
+            screen: DashboardStackNavigator,
+        },
+        TrainerList: {
+            screen: TrainerListStackNavigator
+        },
+        Invitation: {
+            screen: InvitationStackNavigator
+        },
+
+    },
+    {
+        initialRouteName: 'AthleteDashboard',
+        drawerPosition: 'left',
+        contentComponent: CustomTrainerDrawer,
+        drawerOpenRoute: 'DrawerOpen',
+        drawerCloseRoute: 'DrawerClose',
+        drawerToggleRoute: 'DrawerToggle',
+        contentOptions: {
+            activeTintColor: '#ff5a66'
+        }
+
+    });
+
+
+
 // TRAINER
 const TrainingPlanSwitchNavigator = createSwitchNavigator(
     {
@@ -93,6 +185,52 @@ const TrainingPlanSwitchNavigator = createSwitchNavigator(
             const { routeName } = navigation.state;
             return {
                 title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+const EditTrainingDaySwitchNavigator = createSwitchNavigator(
+    {
+        EditTrainingDay: {
+            screen: EditTrainingDayScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: 'Dzień treningowy',
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+const AddTrainingDaySwitchNavigator = createSwitchNavigator(
+    {
+        TrainingDay: {
+            screen: AddTrainingDayScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: 'Dzień treningowy',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -157,7 +295,10 @@ const AthleteListStackNavigator = createStackNavigator(
         AthleteList: {screen: AthleteListScreen},
         TrainerAthleteProfile: {screen: AthleteProfileStackNavigator},
         TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator},
-        BalanceSwitch: {screen: BalanceSwitchNavigator}
+        BalanceSwitch: {screen: BalanceSwitchNavigator},
+        AddTrainingDaySwitch: {screen: AddTrainingDaySwitchNavigator},
+        EditTrainingDaySwitch: {screen: EditTrainingDaySwitchNavigator}
+
     },
     {
         navigationOptions: ({ navigation }) => {
@@ -192,7 +333,11 @@ const TrainerDrawerNavigator = createDrawerNavigator({
     },
     AthleteList: {
         screen: AthleteListStackNavigator
-    }
+    },
+    Invitation: {
+        screen: InvitationStackNavigator
+    },
+
 },
     {
         initialRouteName: 'TrainerDashboard',
@@ -237,17 +382,22 @@ const TrainerDrawerNavigator = createDrawerNavigator({
 const TrainerSwitchNavigator = createSwitchNavigator({
     TrainerDashboard: { screen: TrainerDrawerNavigator },
     Welcome: { screen: WelcomeStackNavigator},
-    // dodac athletedashoard ..
+});
+
+const AthleteSwitchNavigator = createSwitchNavigator({
+    AthleteDashboard: { screen: AthleteDrawerNavigator },
+    Welcome: { screen: WelcomeStackNavigator},
 });
 
 const AppSwitchNavigator = createSwitchNavigator({
     Welcome: { screen: WelcomeStackNavigator},
     TrainerDashboard: { screen: TrainerDrawerNavigator },
-    // dodac athletedashoard ..
+    AthleteDashboard: { screen: AthleteDrawerNavigator },
 });
 
 
 //ew dodac trainer, athlete...
 
 export const TrainerContainer = createAppContainer(TrainerSwitchNavigator);
+export const AthleteContainer = createAppContainer(AthleteSwitchNavigator);
 export const ProfileContainer = createAppContainer(AppSwitchNavigator);

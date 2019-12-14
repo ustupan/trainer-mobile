@@ -1,30 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import {ProfileContainer, TrainerContainer} from "./AppNavigator";
+import {AthleteContainer, ProfileContainer, TrainerContainer} from "./AppNavigator";
 import SplashScreen from "./src/screens/SplashScreen";
 import deviceStorage from "./src/api/deviceStorage";
 
 export default class App extends React.Component{
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       jwt: '',
-      loading: true
+      loading: true,
+      roles: '',
     };
 
     this.loadJwt = deviceStorage.loadJwt.bind(this);
     this.loadJwt();
+
+
   }
 
   render() {
+
     if (this.state.loading) {
       return <SplashScreen/>
     }
     else if (!this.state.jwt){
       return ( <ProfileContainer/>)
     }
+    else if (this.state.roles.filter((role) => role.includes('ATHLETE')).length > 0){
+      console.log(this.state.roles);
+      return ( <AthleteContainer/>)
+    }
     else {
+      console.log("A",this.state.roles);
       return ( <TrainerContainer/>)
     }
   }
