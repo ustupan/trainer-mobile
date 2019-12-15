@@ -72,6 +72,7 @@ export default class AddTrainingDayScreen extends React.Component {
                         maxDate="2030-06-01"
                         confirmBtnText="Potwierdź"
                         cancelBtnText="Anuluj"
+                        locale={"pl"}
                         customStyles={{
                              dateInput: {
                                  marginLeft: 10,

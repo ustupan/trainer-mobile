@@ -1,6 +1,10 @@
 import React from 'react';
 import {Alert, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View,} from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
+import deviceStorage from "../api/deviceStorage";
+import trainerService from "../api/services/trainerService";
+import invitationService from "../api/services/invitationService";
+import SplashScreen from "./SplashScreen";
 
 const maleAvatar = 'https://bootdey.com/img/Content/avatar/avatar7.png';
 const femaleAvatar = 'https://bootdey.com/img/Content/avatar/avatar3.png';
@@ -21,8 +25,21 @@ export default class InvitationScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
             searchUsername: "",
+            invitationList: [],
+            jwt: "",
         };
+
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+            this.getMyInvitations = invitationService.getMyInvitations.bind(this);
+            this.getMyInvitations(this.state.jwt);
+
+        });
+        this.sendInvitation = invitationService.sendInvitation.bind(this);
+        this.manageInvitation = invitationService.manageInvitation.bind(this);
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -51,9 +68,9 @@ export default class InvitationScreen extends React.Component {
     //     });
     // }
 
-
-    tagClickEventListener = () => {
-        Alert.alert('a');
+    tagClickEventListener = (item, accepted) => {
+        this.manageInvitation(this.state.jwt, item.id, item.username, accepted);
+        this.getMyInvitations(this.state.jwt);
     };
 
 
@@ -65,10 +82,10 @@ export default class InvitationScreen extends React.Component {
                     <View>
                         <View style={styles.nameContainer}>
                             <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
-                            <TouchableOpacity style={styles.acceptTxt} onPress={ () => this.tagClickEventListener()}>
+                            <TouchableOpacity style={styles.acceptTxt} onPress={ () => this.tagClickEventListener(item,true)}>
                                 <Text style={{color:"#ff5a66"}}>Potwierdź</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.deleteTxt} onPress={ () => this.tagClickEventListener()}>
+                            <TouchableOpacity style={styles.deleteTxt} onPress={ () => this.tagClickEventListener(item,false)}>
                                 <Text style={{color:"#ffffff"}}>Usuń</Text>
                             </TouchableOpacity>
                         </View>
@@ -80,6 +97,10 @@ export default class InvitationScreen extends React.Component {
     };
 
     render() {
+        if(this.state.loading) return (
+            <SplashScreen/>
+        );
+        console.log(this.state.invitationList);
         return(
             <View style={{ flex: 1 }} >
                 <View style={styles.card}>
@@ -95,7 +116,7 @@ export default class InvitationScreen extends React.Component {
 
                         </View>
                         <View style={styles.invitationContainer}>
-                            <TouchableOpacity style={{}} onPress={ () => this.tagClickEventListener()}>
+                            <TouchableOpacity style={{}} onPress={ () => this.sendInvitation(this.state.jwt, this.state.searchUsername)}>
                                 <Ionicons
                                     style={[styles.icon, styles.inputIcon]}
                                     name="md-send"
@@ -107,7 +128,13 @@ export default class InvitationScreen extends React.Component {
                 </View>
                 <FlatList
                     extraData={this.state}
-                    data={data}
+                    data={this.state.invitationList.map((invitation) => {
+                        return {
+                        id: invitation.id,
+                        username:invitation.senderUsername,
+                        image: maleAvatar
+                    }
+                    })}
                     keyExtractor = {(item) => {
                         return item.id;
                     }}

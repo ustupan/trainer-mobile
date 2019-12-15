@@ -26,6 +26,12 @@ import AddTrainingDayScreen from "./src/screens/trainerScreens/AddTrainingDayScr
 import EditTrainingDayScreen from "./src/screens/trainerScreens/EditTrainingDayScreen";
 import InvitationScreen from "./src/screens/InvitationScreen";
 import TrainerListScreen from "./src/screens/athleteScreens/TrainerListScreen";
+import AddCalendarScreen from "./src/screens/trainerScreens/AddCalendarScreen";
+import CalendarListScreen from "./src/screens/athleteScreens/CalendarListScreen";
+import ResultListScreen from "./src/screens/athleteScreens/ResultListScreen";
+import EditResultScreen from "./src/screens/athleteScreens/EditResultScreen";
+import AddResultScreen from "./src/screens/athleteScreens/AddResultScreen";
+import AthleteResultListScreen from "./src/screens/trainerScreens/AthleteResultListScreen";
 
 
 const WelcomeStackNavigator = createStackNavigator(
@@ -85,6 +91,8 @@ const DashboardStackNavigator = createStackNavigator(
     }
 );
 
+
+
 const InvitationStackNavigator = createStackNavigator(
     {
         Invitation: {
@@ -115,7 +123,138 @@ const InvitationStackNavigator = createStackNavigator(
         }
     }
 );
+
+const BalanceSwitchNavigator = createSwitchNavigator(
+    {
+        Balance: {
+            screen: BalanceScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
 // ATHLETE
+
+const AddResultSwitchNavigator = createSwitchNavigator(
+    {
+        AddResult: {
+            screen: AddResultScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: 'Dodaj rezultat',
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+const EditResultSwitchNavigator = createSwitchNavigator(
+    {
+        EditResult: {
+            screen: EditResultScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: 'Edytuj rezultat',
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+const ResultListStackNavigator = createStackNavigator(
+    {
+        ResultList: {screen: ResultListScreen},
+        EditResultSwitch: {screen: EditResultSwitchNavigator},
+        AddResultSwitch: {screen: AddResultSwitchNavigator},
+        BalanceSwitch: {screen: BalanceSwitchNavigator},
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-list-box"
+                        size={30}
+                        color={tintColor}
+                    />
+                )
+            };
+        }
+    }
+);
+
+const CalendarListStackNavigator = createStackNavigator(
+    {
+        CalendarList: {screen: CalendarListScreen},
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="ios-list-box"
+                        size={30}
+                        color={tintColor}
+                    />
+                )
+            };
+        }
+    }
+);
 
 const TrainerListStackNavigator = createStackNavigator(
     {
@@ -155,6 +294,12 @@ const AthleteDrawerNavigator = createDrawerNavigator({
         },
         Invitation: {
             screen: InvitationStackNavigator
+        },
+        CalendarList: {
+            screen: CalendarListStackNavigator
+        },
+        ResultList: {
+            screen: ResultListStackNavigator
         },
 
     },
@@ -196,6 +341,61 @@ const TrainingPlanSwitchNavigator = createSwitchNavigator(
             };
         }
     });
+
+const AthleteResultListSwitchNavigator = createSwitchNavigator(
+    {
+        AthleteResultList: {
+            screen: AthleteResultListScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
+
+
+const AddCalendarStackNavigator = createStackNavigator(
+    {
+        AddCalendar: {
+            screen: AddCalendarScreen
+        },
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.openDrawer()}
+                        name="md-menu"
+                        size={30}
+                    />
+                ),
+                drawerIcon: ({ tintColor }) => (
+                    <Ionicons
+                        name="md-calendar"
+                        size={30}
+                        color={tintColor}
+                    />
+                )
+            };
+        }
+    }
+);
 
 const EditTrainingDaySwitchNavigator = createSwitchNavigator(
     {
@@ -243,28 +443,7 @@ const AddTrainingDaySwitchNavigator = createSwitchNavigator(
         }
     });
 
-const BalanceSwitchNavigator = createSwitchNavigator(
-    {
-        Balance: {
-            screen: BalanceScreen
-        }
-    },
-    {
-        navigationOptions: ({ navigation }) => {
-            const { routeName } = navigation.state;
-            return {
-                title: routeName,
-                headerLeft: (
-                    <Ionicons
-                        style={{ paddingLeft: 10 }}
-                        onPress={() => navigation.goBack()}
-                        name="md-arrow-back"
-                        size={30}
-                    />
-                )
-            };
-        }
-    });
+
 
 
 const AthleteProfileStackNavigator = createSwitchNavigator(
@@ -295,9 +474,10 @@ const AthleteListStackNavigator = createStackNavigator(
         AthleteList: {screen: AthleteListScreen},
         TrainerAthleteProfile: {screen: AthleteProfileStackNavigator},
         TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator},
-        BalanceSwitch: {screen: BalanceSwitchNavigator},
+        ResultList: {screen: AthleteResultListSwitchNavigator},
         AddTrainingDaySwitch: {screen: AddTrainingDaySwitchNavigator},
-        EditTrainingDaySwitch: {screen: EditTrainingDaySwitchNavigator}
+        EditTrainingDaySwitch: {screen: EditTrainingDaySwitchNavigator},
+        BalanceSwitch: {screen: BalanceSwitchNavigator}
 
     },
     {
@@ -336,6 +516,9 @@ const TrainerDrawerNavigator = createDrawerNavigator({
     },
     Invitation: {
         screen: InvitationStackNavigator
+    },
+    AddCalendar: {
+        screen: AddCalendarStackNavigator
     },
 
 },

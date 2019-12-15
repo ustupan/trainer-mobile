@@ -18,7 +18,7 @@ export default function responseHandle(error){
                 Alert.alert("Error: Page not found","We cannot find resource on our database");
                 break;
             case 409:
-                Alert.alert("This username exist!","Type email which not exit in our database.");
+                Alert.alert("Nie powiodło się!");
                 break;
             case 403:
                 Alert.alert("Nie uzyskano dostępu!","Twoje dane są niepoprawne.");

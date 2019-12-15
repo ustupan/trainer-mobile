@@ -10,23 +10,38 @@ import {
 } from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
 
-export default class AthleteProfileScreen extends Component {
+export default class CalendarListScreen extends Component {
+
+    static navigationOptions = ({ navigation }) => {
+        const { routeName } = navigation.state;
+        return {
+            title: routeName,
+            headerLeft: (
+                <Ionicons
+                    style={{ paddingLeft: 10 }}
+                    onPress={() => navigation.openDrawer()}
+                    name="md-menu"
+                    size = {30}
+                />
+            ),
+        };
+    };
 
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible:false,
-            userSelected:[],
+            modalVisible:true,
             data: [
-                {id:"1", value: "trainingPlan", name: "Plan treningowy", icon:"ios-calendar"},
-                {id:"2", value:"balance", name: "Rezultaty sportowca", icon:"md-trending-up"},
+                {id:"1", value: "trainingPlan", name: "Trening siłowy", icon:"md-grid"},
+                {id:"2", value:"balance", name: "Trening techniki", icon:"md-grid"},
+                {id:"5", value:"balance", name: "Trening mentalny", icon:"md-grid"},
+                {id:"6", value:"balance", name: "Trening dodatkowy", icon:"md-grid"},
             ],
-            athlete: this.props.navigation.state.params.athlete,
         };
     }
 
     clickEventListener = (item) => {
-        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('ResultList');
+        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('BalanceSwitch');
         else this.props.navigation.navigate('TrainingPlanSwitch');
     };
 
@@ -35,13 +50,7 @@ export default class AthleteProfileScreen extends Component {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.headerContent}>
-                        <Image style={styles.avatar}
-                               source={{uri: 'https://bootdey.com/img/Content/avatar/avatar1.png'}}/>
-
-                        <Text style={styles.name1}>
-                            {this.state.athlete.userName}
-                        </Text>
-                        <Text style={styles.email}>{this.state.athlete.email}</Text>
+                        <Text style={styles.email}>Lista planów treningowych</Text>
                     </View>
                 </View>
                 <FlatList
@@ -70,16 +79,14 @@ export default class AthleteProfileScreen extends Component {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop:20,
-        marginBottom: 100,
-        backgroundColor:"#ffffff"
+        backgroundColor:"#ff5a6f"
     },
     headerContent:{
         padding:30,
         alignItems: 'center',
     },
     header:{
-        backgroundColor: "#ffffff",
+        backgroundColor:"#ff5a6f"
     },
     avatar: {
         width: 130,
@@ -127,8 +134,8 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     email:{
-        fontSize:12,
-        color:"#ff5a66",
-        fontWeight:'600',
+        fontSize:24,
+        color:"#fff",
+        fontWeight:'700',
     }
 });

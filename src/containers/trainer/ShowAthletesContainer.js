@@ -33,7 +33,8 @@ export default class ShowAthletesContainer extends React.Component {
 
     athleteClickEventListener = (id) => {
         let athlete = this.getAthleteById(id);
-        this.props.navigation.navigate('TrainerAthleteProfile', {athlete: athlete});
+        if(this.props.type === 'select') this.props.onUserClick(athlete);
+        else this.props.navigation.navigate('TrainerAthleteProfile', {athlete: athlete});
     };
 
     render() {
@@ -41,7 +42,7 @@ export default class ShowAthletesContainer extends React.Component {
             <SplashScreen/>
         );
         else {
-           return (<UserList data={this.state.athleteList} onUserClick={this.athleteClickEventListener.bind(this)}/>)
+           return (<UserList type = {this.props.type} data={this.state.athleteList} onUserClick={this.athleteClickEventListener.bind(this)}/>)
         }
     }
 

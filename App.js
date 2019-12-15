@@ -29,7 +29,6 @@ export default class App extends React.Component{
       return ( <ProfileContainer/>)
     }
     else if (this.state.roles.filter((role) => role.includes('ATHLETE')).length > 0){
-      console.log(this.state.roles);
       return ( <AthleteContainer/>)
     }
     else {

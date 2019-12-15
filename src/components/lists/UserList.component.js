@@ -32,6 +32,24 @@ export default class UserList extends React.Component {
 
 
     renderItem = ({item}) => {
+        if(this.props.type === 'select'){
+            return (
+                <TouchableOpacity onPress={() => {this.props.onUserClick(item.id)}}>
+                    <View style={styles.row}>
+                        <Image source={{ uri: item.image }} style={styles.pic} />
+                        <View>
+                            <View style={styles.nameContainer}>
+                                <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
+                            </View>
+                            <View style={styles.msgContainer}>
+                                <Text style={styles.msgTxt}>{item.email}</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                </TouchableOpacity>
+            );
+        }
         return (
             <TouchableOpacity onPress={() => {this.props.onUserClick(item.id)}}>
                 <View style={styles.row}>
@@ -71,7 +89,6 @@ export default class UserList extends React.Component {
                                    onChangeText={(username) => this.setState({searchUsername: username})}/>
                     </View>
                 </View>
-
 
                 <FlatList
                     extraData={this.state}

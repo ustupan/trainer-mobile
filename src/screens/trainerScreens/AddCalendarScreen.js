@@ -1,27 +1,43 @@
 import React from 'react';
-import {Picker, StyleSheet, Text, TouchableOpacity, View, Alert, TextInput, ScrollView} from 'react-native';
+import {Picker, StyleSheet, Text, TouchableOpacity, View, Alert, TextInput} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import Button from "react-native-button";
 import {AppStyles} from "../../../AppStyles";
 import RNPickerSelect from "react-native-picker-select";
+import ShowAthletesContainer from "../../containers/trainer/ShowAthletesContainer";
+import {Ionicons} from "@expo/vector-icons";
 
+export default class AddCalendarScreen extends React.Component {
 
-export default class EditTrainingDayScreen extends React.Component {
+    static navigationOptions = ({ navigation }) => {
+        const { routeName } = navigation.state;
+        return {
+            title: routeName,
+            headerLeft: (
+                <Ionicons
+                    style={{ paddingLeft: 10 }}
+                    onPress={() => navigation.openDrawer()}
+                    name="md-menu"
+                    size = {30}
+                />
+            ),
+        };
+    };
 
     constructor(props) {
         super(props);
         this.state = {
-            trainingDayDate:"2019-05-01",
-            discipline: "Bieg na 100m",
-            motivationLevel: "",
-            dispositionLevel: "",
-            note: "Opis wykonania treningu",
-            description: "Dokłady opis treningu disabled disabled disableddisableddisableddisableddisableddisabled disabled disabled disabled disabled disabled disabled disabled",
-            title: "Bieg na 100m",
+            title: "",
+            athleteUsername: "",
+            athleteId: "",
         };
     }
 
-    clickEventListener = () => {
+    selectAthleteListener = (item) => {
+        this.setState({
+            athleteId: item.id,
+            athleteUsername: item.userName
+        })
     };
 
     setLoadingFalse(){
@@ -31,117 +47,36 @@ export default class EditTrainingDayScreen extends React.Component {
     }
 
     render() {
-        const motivationPlaceholder = {
-            label: 'Wybierz poziom motywacji...',
-            value: null,
-            color: '#9EA0A4',
-        };
-        const dispositionPlaceholder = {
-            label: 'Wybierz poziom dyspozycji...',
-            value: null,
-            color: '#9EA0A4',
-        };
         return (
-                <View style={styles.container}>
-                    <ScrollView contentContainerStyle={styles.scrollView}>
-                        <Text style={{fontSize:25, fontWeight:'bold',  color:"#ff5a66", marginTop: 30}}>Dzień treningowy</Text>
-                        <View style={[styles.InputContainer, {marginTop: 50}]}>
-                            <TextInput
-                                style={styles.body}
-                                placeholder="Tytuł"
-                                onChangeText={text => this.setState({ title: text })}
-                                value={this.state.title}
-                                placeholderTextColor={AppStyles.color.grey}
-
-                            />
-                        </View>
-                        <View style={[styles.bodyContent, {marginBottom: 20}]}>
-                            <DatePicker
-                                style={{width: 335, borderWidth: 1,
-                                    borderStyle: "solid",
-                                    borderColor: AppStyles.color.grey,
-                                    height: 50,
-                                    marginBottom: 30,
-                                    borderRadius: 5}}
-                                date={this.state.trainingDayDate}
-                                mode="date"
-                                placeholder="Data dnia treningowego"
-                                format="YYYY-MM-DD"
-                                minDate="2019-05-01"
-                                maxDate="2030-06-01"
-                                confirmBtnText="Potwierdź"
-                                cancelBtnText="Anuluj"
-                                locale={"pl"}
-                                customStyles={{
-                                    dateInput: {
-                                        marginLeft: 10,
-                                        borderWidth: 0,
-                                        textAlign: 'left',
-                                    }
-
-                                }}
-                                onDateChange={(date) => {this.setState({trainingDayDate: date})}}
-                            />
-                        </View>
-
-                        <View style={[styles.InputContainer,{}]}>
-                            <TextInput
-                                style={[styles.body, {height: 200, justifyContent: 'center',
-                                    alignItems: 'center'}]}
-                                multiline={true}
-                                onChangeText={text => this.setState({ description: text })}
-                                value={this.state.description}
-                                placeholderTextColor={AppStyles.color.grey}
-                                disabled={true}
-                            />
-                        </View>
-                        <View style={styles.InputContainer}>
-                            <RNPickerSelect
-                                placeholder={motivationPlaceholder}
-                                style={pickerSelectStyles}
-                                onValueChange={(value) => this.setState({motivationLevel:value})}
-                                value={this.state.motivationLevel}
-                                items={[
-                                    { label: '1', value: 1 },
-                                    { label: '2', value: 2 },
-                                    { label: '3', value: 3 },
-                                    { label: '4', value: 4 },
-                                    { label: '5', value: 5 },
-                                ]}
-                            />
-                        </View>
-                        <View style={styles.InputContainer}>
-                            <RNPickerSelect
-                                placeholder={dispositionPlaceholder}
-                                style={pickerSelectStyles}
-                                onValueChange={(value) => this.setState({dispositionLevel:value})}
-                                value={this.state.dispositionLevel}
-                                items={[
-                                    { label: '1', value: 1 },
-                                    { label: '2', value: 2 },
-                                    { label: '3', value: 3 },
-                                    { label: '4', value: 4 },
-                                    { label: '5', value: 5 },
-                                ]}
-                            />
-                        </View>
-                        <View style={[styles.InputContainer,{}]}>
-                            <TextInput
-                                style={[styles.body, {height: 200, justifyContent: 'center',
-                                    alignItems: 'center'}]}
-                                multiline={true}
-                                onChangeText={text => this.setState({ note: text })}
-                                value={this.state.note}
-                                placeholderTextColor={AppStyles.color.grey}
-                                disabled={true}
-                            />
-                        </View>
-                    </ScrollView>
-                    <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
-                        <Text style={styles.buttonText}>Edytuj dzień treningowy</Text>
-                    </TouchableOpacity>
+            <View style={styles.container}>
+                <Text style={{fontSize:25, fontWeight:'bold',  color:"#ff5a66", marginTop: 10}}>Plan treningowy</Text>
+                <View style={[styles.InputContainer, {marginTop: 20}]}>
+                    <TextInput
+                        style={styles.body}
+                        placeholder="Tytuł"
+                        onChangeText={text => this.setState({ title: text })}
+                        value={this.state.title}
+                        placeholderTextColor={AppStyles.color.grey}
+                    />
+                </View>
+                <View style={[styles.InputContainer, {}]}>
+                    <TextInput
+                        style={styles.body}
+                        placeholder="Wybrany sportowiec"
+                        onChangeText={text => this.setState({ title: text })}
+                        value={this.state.athleteUsername}
+                        editable={false}
+                        placeholderTextColor={AppStyles.color.grey}
+                    />
+                </View>
+                <View style={{height: 400, marginBottom: 20, width:350}}>
+                    <ShowAthletesContainer navigation={this.props.navigation} type='select' onUserClick={this.selectAthleteListener.bind(this)}/>
                 </View>
 
+                <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
+                    <Text style={styles.buttonText}>Swtórz plan treningowy</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 };
@@ -150,10 +85,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center'
-    },
-    scrollView: {
-        alignItems: 'center',
-        width: 350
     },
     title: {
         fontSize: AppStyles.fontSize.title,
@@ -189,8 +120,8 @@ const styles = StyleSheet.create({
         color: "red"
     },
     InputContainer: {
-        width: 335,
-        marginBottom: 45,
+        width: AppStyles.textInputWidth.main,
+        marginBottom: 10,
         borderWidth: 1,
         borderStyle: "solid",
         borderColor: AppStyles.color.grey,
@@ -241,10 +172,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         fontWeight: '600'
-    },
-        bodyContent:{
-        flexDirection: 'row',
-        flexWrap: 'wrap'
     },
 });
 
