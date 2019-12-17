@@ -32,6 +32,7 @@ import ResultListScreen from "./src/screens/athleteScreens/ResultListScreen";
 import EditResultScreen from "./src/screens/athleteScreens/EditResultScreen";
 import AddResultScreen from "./src/screens/athleteScreens/AddResultScreen";
 import AthleteResultListScreen from "./src/screens/trainerScreens/AthleteResultListScreen";
+import AthleteTrainingPlanScreen from "./src/screens/athleteScreens/AthleteTrainingPlanScreen";
 
 
 const WelcomeStackNavigator = createStackNavigator(
@@ -147,7 +148,52 @@ const BalanceSwitchNavigator = createSwitchNavigator(
         }
     });
 
+const EditTrainingDaySwitchNavigator = createSwitchNavigator(
+    {
+        EditTrainingDay: {
+            screen: EditTrainingDayScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: 'Dzień treningowy',
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
 // ATHLETE
+
+const AthleteTrainingPlanSwitchNavigator = createSwitchNavigator(
+    {
+        AthleteTrainingPlan: {
+            screen: AthleteTrainingPlanScreen
+        }
+    },
+    {
+        navigationOptions: ({ navigation }) => {
+            const { routeName } = navigation.state;
+            return {
+                title: routeName,
+                headerLeft: (
+                    <Ionicons
+                        style={{ paddingLeft: 10 }}
+                        onPress={() => navigation.goBack()}
+                        name="md-arrow-back"
+                        size={30}
+                    />
+                )
+            };
+        }
+    });
 
 const AddResultSwitchNavigator = createSwitchNavigator(
     {
@@ -230,6 +276,8 @@ const ResultListStackNavigator = createStackNavigator(
 const CalendarListStackNavigator = createStackNavigator(
     {
         CalendarList: {screen: CalendarListScreen},
+        AthleteTrainingPlanSwitch: {screen: AthleteTrainingPlanSwitchNavigator},
+        EditTrainingDaySwitch: {screen: EditTrainingDaySwitchNavigator},
     },
     {
         navigationOptions: ({ navigation }) => {
@@ -342,6 +390,8 @@ const TrainingPlanSwitchNavigator = createSwitchNavigator(
         }
     });
 
+
+
 const AthleteResultListSwitchNavigator = createSwitchNavigator(
     {
         AthleteResultList: {
@@ -397,28 +447,7 @@ const AddCalendarStackNavigator = createStackNavigator(
     }
 );
 
-const EditTrainingDaySwitchNavigator = createSwitchNavigator(
-    {
-        EditTrainingDay: {
-            screen: EditTrainingDayScreen
-        }
-    },
-    {
-        navigationOptions: ({ navigation }) => {
-            const { routeName } = navigation.state;
-            return {
-                title: 'Dzień treningowy',
-                headerLeft: (
-                    <Ionicons
-                        style={{ paddingLeft: 10 }}
-                        onPress={() => navigation.goBack()}
-                        name="md-arrow-back"
-                        size={30}
-                    />
-                )
-            };
-        }
-    });
+
 
 const AddTrainingDaySwitchNavigator = createSwitchNavigator(
     {
@@ -473,11 +502,11 @@ const AthleteListStackNavigator = createStackNavigator(
     {
         AthleteList: {screen: AthleteListScreen},
         TrainerAthleteProfile: {screen: AthleteProfileStackNavigator},
-        TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator},
         ResultList: {screen: AthleteResultListSwitchNavigator},
         AddTrainingDaySwitch: {screen: AddTrainingDaySwitchNavigator},
         EditTrainingDaySwitch: {screen: EditTrainingDaySwitchNavigator},
-        BalanceSwitch: {screen: BalanceSwitchNavigator}
+        BalanceSwitch: {screen: BalanceSwitchNavigator},
+        TrainingPlanSwitch: {screen: TrainingPlanSwitchNavigator}
 
     },
     {
@@ -504,8 +533,6 @@ const AthleteListStackNavigator = createStackNavigator(
         }
     }
 );
-
-
 
 const TrainerDrawerNavigator = createDrawerNavigator({
     TrainerDashboard: {

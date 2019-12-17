@@ -14,6 +14,10 @@ import {
 } from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
 import DatePicker from "react-native-datepicker";
+import deviceStorage from "../../api/deviceStorage";
+import athleteService from "../../api/services/athleteService";
+import trainerService from "../../api/services/trainerService";
+import SplashScreen from "../SplashScreen";
 
 export default class AthleteResultListScreen extends Component {
 
@@ -33,50 +37,46 @@ export default class AthleteResultListScreen extends Component {
     };
 
     constructor(props) {
-        console.log(props);
         super(props);
         this.state = {
-            trainingDays: [],
             dateFrom:"",
             dateTo:"",
-            data: [
-                {id: "1", day:1, month: 'Sep'},
-                {id: "2", day:2, month: 'Aug'},
-                {id: "3", day:1, month: 'Dec'},
-                {id: "4", day:12, month: 'Jul'},
-                {id: "5", day:3, month: 'Oct'},
-                {id: "6", day:2, month: 'Aug'},
-                {id: "7", day:1, month: 'Dec'},
-                {id: "8", day:12, month: 'Jul'},
-                {id: "9", day:3, month: 'Oct'},
-                {id: "10", day:2, month: 'Aug'},
-                {id: "11", day:1, month: 'Dec'},
-                {id: "12", day:12, month: 'Jul'},
-                {id: "13", day:3, month: 'Oct'},
-                {id: "14", day:2, month: 'Aug'},
-                {id: "15", day:1, month: 'Dec'},
-                {id: "16", day:12, month: 'Jul'},
-                {id: "17", day:3, month: 'Oct'},
-                {id: "18", day:2, month: 'Aug'},
-                {id: "19", day:1, month: 'Dec'},
-                {id: "20", day:12, month: 'Jul'},
-                {id: "21", day:3, month: 'Oct'},
-            ],
+            resultList: [],
+            jwt: ""
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.getAllAthleteResults = trainerService.getAllAthleteResults.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+            this.getAllAthleteResults = trainerService.getAllAthleteResults.bind(this);
+            this.getAllAthleteResults(this.state.jwt, this.props.navigation.state.params.athleteId);
+        });
+    }
+
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            if(this.state.jwt !== "") {
+                this.state.loading = true;
+                this.getAllAthleteResults(this.state.jwt, this.props.navigation.state.params.athleteId);
+            }
+        });
     }
 
     eventClickListener = (viewId) => {
         this.props.navigation.navigate('EditResultSwitch');
     };
 
-    addTrainingDayListiner = () => {
-        this.props.navigation.navigate('AddResultSwitch');
-    };
     goToBalanceListiner = () => {
-        this.props.navigation.navigate('BalanceSwitch');
+        this.props.navigation.navigate('BalanceSwitch', {resultList: this.state.resultList.sort((a,b) => {
+                return new Date(a.resultDate) - new Date(b.resultDate);
+            })});
     };
 
     render() {
+        if(this.state.loading) return (
+            <SplashScreen/>
+        );
         return (
             <View style={styles.container}>
                 <View style={styles.body}>
@@ -126,25 +126,33 @@ export default class AthleteResultListScreen extends Component {
                 </View>
                 <FlatList
                     style={styles.eventList}
-                    data = {this.state.data}
+                    data = {this.state.resultList.sort((a,b) => {
+                        return new Date(a.resultDate) - new Date(b.resultDate);
+                    }).filter((el) => {
+                        if (this.state.dateTo !== "" && this.state.dateFrom) {
+                            return new Date(el.resultDate) < new Date(this.state.dateTo) && new Date(el.resultDate) > new Date(this.state.dateFrom)
+                        }
+                        else if (this.state.dateTo !== "") return new Date(el.resultDate) < new Date(this.state.dateTo);
+                        else if (this.state.dateFrom !== "") return new Date(el.resultDate) > new Date(this.state.dateFrom);
+                        else return true
+                    })}
                     keyExtractor={(item) => {
-                        return item.id;
+                        return item.id.toString();
                     }}
                     renderItem = {({item}) => {
                         return (
                             <View>
-                                <TouchableOpacity onPress={() => this.eventClickListener("row")}>
+                                <TouchableOpacity onPress={() => this.eventClickListener(item)}>
                                     <View style={styles.eventBox}>
                                         <View style={[styles.eventContent, {borderColor: `#ff5a66`}]}>
-                                            <Text  style={styles.eventTime}>20-01-2018</Text>
-                                            <Text  style={styles.userName}>Bieg na 100m</Text>
-                                            <Text  style={styles.description}>9.1s</Text>
+                                            <Text  style={styles.eventTime}>{item.resultDate}</Text>
+                                            <Text  style={styles.userName}>{item.discipline}</Text>
+                                            <Text  style={styles.description}>{`${item.value}${item.unit}`}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         )}}/>
-
                 <View style={{position: 'absolute', right: 10, bottom: 16,backgroundColor:"#ff5a66",width: 56, height: 56, borderRadius: 56/ 2,alignItems:'center'}}>
                     <TouchableOpacity onPress={() => this.goToBalanceListiner()}>
                         <Ionicons style = {{color: "#fff", }}

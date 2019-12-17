@@ -64,6 +64,30 @@ const trainerService = {
         }
     },
 
+    async getAllAthleteResults(jwt, athleteId) {
+        try {
+            const header = `Authorization: Bearer ${jwt}`;
+            const response = await axios.post(`/balance/getAllAthleteResults`, {
+                "id": athleteId
+            },
+            {
+                headers: { Authorization: `Bearer ${jwt}` }
+            });
+            if (response !== null) {
+                this.setState({
+                    resultList: response.data,
+                    loading: false
+                });
+            } else {
+                this.setState({
+                    loading: false
+                });
+            }
+        }
+        catch (error) {
+            responseHandle(error);
+        }
+    },
 
     async getCalendarByAthleteId(jwt, athleteId) {
         try {

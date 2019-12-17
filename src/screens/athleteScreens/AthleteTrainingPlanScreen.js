@@ -14,17 +14,18 @@ import {
 } from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
 import deviceStorage from "../../api/deviceStorage";
-import trainerService from "../../api/services/trainerService";
 import SplashScreen from "../SplashScreen";
+import athleteService from "../../api/services/athleteService";
 
 
 const monthNames = ["Styczenia", "Lutego", "Marca", "Kwietnia", "Maja", "Czerwca",
     "Lipica", "Sierpnia", "Września", "Października", "Listopada", "Grudnia"
 ];
 
-export default class TrainingPlanScreen extends Component {
+export default class AthleteTrainingPlanScreen extends Component {
 
     constructor(props) {
+        console.log(props.navigation.state);
         super(props);
         this.state = {
             loading:true,
@@ -34,7 +35,7 @@ export default class TrainingPlanScreen extends Component {
         this.loadJwt = deviceStorage.loadJwt.bind(this);
         this.loadJwt().then( () => {
             this.setState({loading: true});
-            this.getCalendarByAthleteId = trainerService.getCalendarByAthleteId.bind(this);
+            this.getCalendarById = athleteService.getCalendarById.bind(this);
         });
         this.updateScreen = this.updateScreen.bind(this);
     }
@@ -46,16 +47,13 @@ export default class TrainingPlanScreen extends Component {
 
     updateScreen() {
         this.state.loading = true;
-        this.getCalendarByAthleteId(this.state.jwt, this.props.navigation.state.params.athleteId);
+        this.getCalendarById(this.state.jwt, this.props.navigation.state.params.calendarId);
     }
 
     eventClickListener = (item) => {
-       this.props.navigation.navigate('EditTrainingDaySwitch', {trainingDay: item});
+        this.props.navigation.navigate('EditTrainingDaySwitch', {trainingDay: item});
     };
 
-    addTrainingDayListiner = () => {
-        this.props.navigation.navigate('AddTrainingDaySwitch', {calendar: this.state.calendar});
-    };
 
     render() {
         if(this.state.loading) return (
@@ -109,13 +107,6 @@ export default class TrainingPlanScreen extends Component {
                                 </TouchableOpacity>
                             </View>
                         )}}/>
-                <View style={{position: 'absolute', right: 10, bottom: 0}}>
-                    <TouchableOpacity onPress={() => this.addTrainingDayListiner()}>
-                        <Ionicons style = {{color: "#ff5a66"}}
-                                  name='md-add-circle'
-                                  size={70} />
-                    </TouchableOpacity>
-                </View>
             </View>
         );
     }

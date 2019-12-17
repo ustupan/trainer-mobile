@@ -21,6 +21,9 @@ const testData = [
     {"id":"10","discipline":"100m run","description":"lorem ipsum","value":"10.1", "unit": "s", "motivationLevel": 1, "resultDate": "2019-11-29", "dispositionLevel": 2 },
     {"id":"111","discipline":"100m run","description":"lorem ipsum","value":"9.5", "unit": "s", "motivationLevel": 5, "resultDate": "2019-12-1", "dispositionLevel": 4 },
 ];
+
+
+
 const colors = [
     {color: "rgb(192,20,42)"},
     {color: "rgb(86,0,3)"},
@@ -38,22 +41,27 @@ let resultData = [];
 export default class BalanceScreen extends Component {
 
     constructor(props) {
+        console.log(props);
         super(props);
         this.state = {
             loading: false,
             settings: true,
             chartType: "",
-            data: testData,
+            data: this.props.navigation.state.params.resultList,
             selected: "",
             dateFrom:"",
             dateTo:"",
-            discipline: '100m run'
+            discipline: this.props.navigation.state.params.resultList[0].discipline,
+            unit: this.props.navigation.state.params.resultList[0].unit,
+            comparator: this.props.navigation.state.params.resultList[0] > this.props.navigation.state.params.resultList.slice(-1)[0],
         };
         this.setLoadingFalse = this.setLoadingFalse.bind(this);
         this.setSettingsTrue = this.setSettingsTrue.bind(this);
+
     }
 
     getBest10(data) {
+        if(this.state.comparator) return this.getWorst10(data);
         return data.sort((a, b) => {
             if (parseFloat(a.value) > parseFloat( b.value)) return 1;
             else return -1;
@@ -64,6 +72,7 @@ export default class BalanceScreen extends Component {
     }
 
     getWorst10(data) {
+        if(this.state.comparator) return this.getBest10(data);
         return data.sort((a, b) => {
             if (parseFloat(a.value) < parseFloat( b.value)) return 1;
             else return -1;
@@ -75,7 +84,7 @@ export default class BalanceScreen extends Component {
 
 
     clickEventListener = () => {
-        resultData = testData.sort((a, b) => {
+        resultData = this.state.data.sort((a, b) => {
             if (new Date(a.resultDate) > new Date(b.resultDate)) return 1;
             else return -1;
         });
@@ -164,7 +173,7 @@ export default class BalanceScreen extends Component {
             loading: false,
             settings: true,
             chartType: "",
-            data: testData,
+            data: this.state.data,
             selected: "",
             dateFrom:"",
             dateTo:""
@@ -252,10 +261,10 @@ export default class BalanceScreen extends Component {
         );
 
         if(this.state.charType === 'line') return (
-            <LineChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={resultData}/>
+            <LineChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={resultData} discipline={this.state.discipline} unit={this.state.unit}/>
         );
         if(this.state.charType === 'bar') return (
-            <BarChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={resultData}/>
+            <BarChartComponent setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={resultData} discipline={this.state.discipline} unit={this.state.unit}/>
         );
         if(this.state.charType === 'pie' && this.state.selected === 'averageDisposition') return (
             <PieChartComponent name = 'Średni poziom dyspozycji' setLoadingFalse = {this.setLoadingFalse} setSettingsTrue = {this.setSettingsTrue} data={resultData}/>

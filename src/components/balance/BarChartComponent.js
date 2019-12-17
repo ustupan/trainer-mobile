@@ -1,6 +1,7 @@
 import React from "react";
 import {View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import BarChart from "react-native-chart-kit/src/bar-chart";
+import LineChart from "react-native-chart-kit/src/line-chart";
 const screenWidth = Dimensions.get("window").width;
 
 const chartConfig = {
@@ -16,7 +17,9 @@ export default class BarChartComponent extends React.Component {
         super(props);
         this.state = {
             resultsData: [],
-            chartData: this.props.data
+            chartData: this.props.data,
+            discipline: this.props.discipline,
+            unit: this.props.unit,
         };
         this.props.setLoadingFalse();
     }
@@ -26,7 +29,7 @@ export default class BarChartComponent extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.body}>
-                    <Text style={styles.buttonText1}>Bieg na 100m</Text>
+                    <Text style={styles.buttonText1}>{this.state.discipline}</Text>
                     <BarChart
                         data={{
                             labels: this.props.data.map((el)=> el.resultDate),
@@ -38,7 +41,7 @@ export default class BarChartComponent extends React.Component {
                                 }
                             ]
                         }}
-                        yAxisLabel={'s'}
+                        yAxisSuffix={this.state.unit.toString()}
                         fromZero={false}
                         verticalLabelRotation={90}
                         width={screenWidth}

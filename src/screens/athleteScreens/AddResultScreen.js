@@ -4,6 +4,9 @@ import DatePicker from 'react-native-datepicker'
 import Button from "react-native-button";
 import {AppStyles} from "../../../AppStyles";
 import RNPickerSelect from "react-native-picker-select";
+import deviceStorage from "../../api/deviceStorage";
+import trainerService from "../../api/services/trainerService";
+import athleteService from "../../api/services/athleteService";
 
 
 export default class AddResultScreen extends React.Component {
@@ -19,9 +22,26 @@ export default class AddResultScreen extends React.Component {
             dispositionLevel: "",
             description: "Dokłady opis treningu disa disabled disabled disabled disabled disabled disabled",
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+        });
+        this.createResult = athleteService.addResult.bind(this);
     }
 
     clickEventListener = () => {
+        if(this.state.discipline === '') Alert.alert("Dyscyplina nie może być pusta!");
+        else if(this.state.value === '') Alert.alert("Rezultat nie może być pusty!");
+        else if(this.state.resultDate === '') Alert.alert("Data rezultatu nie może być pusta!");
+        else if(this.state.unit === '') Alert.alert("Jednostka nie może być pusta");
+        else this.createResult(this.state.jwt, {
+            discipline: this.state.discipline,
+                dispositionLevel: this.state.dispositionLevel,
+                motivationLevel: this.state.motivationLevel,
+                resultDate: this.state.resultDate,
+                unit: this.state.unit,
+                value: this.state.value,
+            })
     };
 
     setLoadingFalse(){

@@ -11,11 +11,12 @@ export default class UserList extends React.Component {
         super(props);
         this.state = {
             searchUsername: "",
+            data: this.props.data,
         };
     }
 
     dataToListMapper(){
-        return this.props.data.map((el) => {
+        return this.state.data.map((el) => {
             return {
                 id: el.id.toString(),
                 username: el.userName,
@@ -26,8 +27,8 @@ export default class UserList extends React.Component {
     }
 
 
-    tagClickEventListener = () => {
-        Alert.alert('a');
+    tagClickEventListener = (id) => {
+       Alert.alert("Tymczasowo zablokowano możliwość usuwania!");
     };
 
 
@@ -57,7 +58,7 @@ export default class UserList extends React.Component {
                     <View>
                         <View style={styles.nameContainer}>
                             <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
-                            <TouchableOpacity style={styles.deleteTxt} onPress={ () => this.tagClickEventListener()}>
+                            <TouchableOpacity style={styles.deleteTxt} onPress={ () => this.tagClickEventListener(item.id)}>
                                 <Text style={{color:"#ffffff"}}>Usuń</Text>
                             </TouchableOpacity>
                         </View>

@@ -9,6 +9,9 @@ import {
     Alert
 } from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
+import deviceStorage from "../../api/deviceStorage";
+import athleteService from "../../api/services/athleteService";
+import SplashScreen from "../SplashScreen";
 
 export default class CalendarListScreen extends Component {
 
@@ -31,21 +34,26 @@ export default class CalendarListScreen extends Component {
         super(props);
         this.state = {
             modalVisible:true,
-            data: [
-                {id:"1", value: "trainingPlan", name: "Trening siłowy", icon:"md-grid"},
-                {id:"2", value:"balance", name: "Trening techniki", icon:"md-grid"},
-                {id:"5", value:"balance", name: "Trening mentalny", icon:"md-grid"},
-                {id:"6", value:"balance", name: "Trening dodatkowy", icon:"md-grid"},
-            ],
+            calendarList: [],
         };
+
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+            this.getMyCalendars = athleteService.getMyCalendars.bind(this);
+            this.getMyCalendars(this.state.jwt);
+        });
     }
 
     clickEventListener = (item) => {
-        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('BalanceSwitch');
-        else this.props.navigation.navigate('TrainingPlanSwitch');
+        this.props.navigation.navigate('AthleteTrainingPlanSwitch', {calendarId: item.id});
     };
 
     render() {
+        if(this.state.loading) return (
+            <SplashScreen/>
+        );
+
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -53,10 +61,16 @@ export default class CalendarListScreen extends Component {
                         <Text style={styles.email}>Lista planów treningowych</Text>
                     </View>
                 </View>
+
                 <FlatList
                     style={styles.contentList}
                     columnWrapperStyle={styles.listContainer}
-                    data={this.state.data}
+                    data={this.state.calendarList.map((calendar) => {
+                        return {
+                            id: calendar.id.toString(),
+                            title: calendar.title
+                        }
+                    })}
                     keyExtractor= {(item) => {
                         return item.id;
                     }}
@@ -64,10 +78,10 @@ export default class CalendarListScreen extends Component {
                         return (
                             <TouchableOpacity style={styles.card} onPress={() => {this.clickEventListener(item)}}>
                                 <Ionicons style = {{color: "#ff5a66", padding: 10}}
-                                          name={item.icon}
+                                          name="md-grid"
                                           size={60} />
                                 <View>
-                                    <Text style={styles.name}>{item.name}</Text>
+                                    <Text style={styles.name}>{item.title}</Text>
                                 </View>
                             </TouchableOpacity>
                         )}}/>

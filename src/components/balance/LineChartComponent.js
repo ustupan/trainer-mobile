@@ -25,6 +25,8 @@ export default class LineChartComponent extends React.Component {
             resultsData: [],
             chartData: [],
             barPercentage: 0.5,
+            discipline: this.props.discipline,
+            unit: this.props.unit,
         };
 
     }
@@ -33,7 +35,7 @@ export default class LineChartComponent extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.body}>
-                    <Text style={styles.buttonText1}>Bieg na 100m</Text>
+                    <Text style={styles.buttonText1}>{this.state.discipline}</Text>
                     <LineChart
                         bezier
                         data={{
@@ -46,7 +48,7 @@ export default class LineChartComponent extends React.Component {
                                 }
                             ]
                         }}
-                        yAxisSuffix={"s"}
+                        yAxisSuffix={this.state.unit.toString()}
                         fromZero={false}
                         verticalLabelRotation={90}
                         width={screenWidth}

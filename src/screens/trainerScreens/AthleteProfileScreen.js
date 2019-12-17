@@ -27,7 +27,9 @@ export default class AthleteProfileScreen extends Component {
     }
 
     clickEventListener = (item) => {
-        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('ResultList');
+        console.log(item);
+        console.log(this.state.athlete);
+        if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('ResultList',{athleteId: this.state.athlete.id});
         else this.props.navigation.navigate('TrainingPlanSwitch', {athleteId: this.state.athlete.id});
     };
 
