@@ -1,7 +1,6 @@
 import axios from '../../../axios'
 import responseHandle from "../responseHandler";
-
-
+import {Alert} from 'react-native';
 
 const invitationService = {
 
@@ -36,11 +35,13 @@ const invitationService = {
     async sendInvitation(jwt, receiverUsername) {
         try {
             const header = `Authorization: Bearer ${jwt}`;
-            return await axios.post(`/invitation/addInvitation`, {
+            await axios.post(`/invitation/addInvitation`, {
                     "receiverUsername":receiverUsername
                 },
                 {headers: { Authorization: `Bearer ${jwt}` }}
             );
+            Alert.alert('Wysłano zaproszenie!');
+
         }
         catch (error) {
             responseHandle(error);

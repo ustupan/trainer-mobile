@@ -69,6 +69,7 @@ const athleteService = {
                 });
             } else {
                 this.setState({
+                    calendarList: [],
                     loading: false
                 });
             }

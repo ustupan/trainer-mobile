@@ -18,7 +18,7 @@ export default class CalendarListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Plany treningowe',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}

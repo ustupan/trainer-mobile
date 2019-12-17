@@ -48,7 +48,6 @@ export default class SignUp extends React.Component {
         try {
             this.onValid();
             const response = await register(this.state);
-            Alert.alert('Welcome!','We are glad to say \'HI\' new user!');
         } catch (err) {
             console.log(err);
             responseHandle(err);

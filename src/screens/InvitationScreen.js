@@ -45,7 +45,7 @@ export default class InvitationScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Zaproszenia do znajomych',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}
@@ -70,6 +70,8 @@ export default class InvitationScreen extends React.Component {
 
     tagClickEventListener = (item, accepted) => {
         this.manageInvitation(this.state.jwt, item.id, item.username, accepted);
+        if(accepted) Alert.alert('Zaakceptowano zaproszenie!');
+        if(!accepted) Alert.alert('Odrzucono zaproszenie!');
         this.getMyInvitations(this.state.jwt);
     };
 
@@ -100,7 +102,6 @@ export default class InvitationScreen extends React.Component {
         if(this.state.loading) return (
             <SplashScreen/>
         );
-        console.log(this.state.invitationList);
         return(
             <View style={{ flex: 1 }} >
                 <View style={styles.card}>
@@ -127,7 +128,7 @@ export default class InvitationScreen extends React.Component {
                     </View>
                 </View>
                 <FlatList
-                    extraData={this.state}
+                    extraData={this.state.invitationList}
                     data={this.state.invitationList.map((invitation) => {
                         return {
                         id: invitation.id,

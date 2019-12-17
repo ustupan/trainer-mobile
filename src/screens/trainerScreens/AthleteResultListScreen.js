@@ -24,7 +24,7 @@ export default class AthleteResultListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Rezultaty sportowca',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}

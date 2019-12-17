@@ -20,7 +20,7 @@ export default class Dashboard extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}

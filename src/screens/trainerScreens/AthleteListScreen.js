@@ -8,7 +8,7 @@ export default class AthleteList extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Sportowcy',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}

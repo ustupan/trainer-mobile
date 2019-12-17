@@ -71,7 +71,7 @@ const DashboardStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Ekran powitalny',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -104,7 +104,7 @@ const InvitationStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Zaproszenia',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -252,7 +252,7 @@ const ResultListStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Rezultaty',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -263,7 +263,7 @@ const ResultListStackNavigator = createStackNavigator(
                 ),
                 drawerIcon: ({ tintColor }) => (
                     <Ionicons
-                        name="ios-list-box"
+                        name="md-fitness"
                         size={30}
                         color={tintColor}
                     />
@@ -283,7 +283,7 @@ const CalendarListStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Plany treningowe',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -312,7 +312,7 @@ const TrainerListStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Trenerzy',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -323,7 +323,7 @@ const TrainerListStackNavigator = createStackNavigator(
                 ),
                 drawerIcon: ({ tintColor }) => (
                     <Ionicons
-                        name="ios-list-box"
+                        name="md-contacts"
                         size={30}
                         color={tintColor}
                     />
@@ -426,7 +426,7 @@ const AddCalendarStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Dodaj plan treningowy',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -513,7 +513,7 @@ const AthleteListStackNavigator = createStackNavigator(
         navigationOptions: ({ navigation }) => {
             const { routeName } = navigation.state;
             return {
-                title: routeName,
+                title: 'Sportowcy',
                 headerLeft: (
                     <Ionicons
                         style={{ paddingLeft: 10 }}
@@ -524,7 +524,7 @@ const AthleteListStackNavigator = createStackNavigator(
                 ),
                 drawerIcon: ({ tintColor }) => (
                     <Ionicons
-                        name="ios-list-box"
+                        name="md-people"
                         size={30}
                         color={tintColor}
                     />

@@ -23,7 +23,7 @@ export default class ResultListScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Rezultaty',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}

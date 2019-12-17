@@ -15,7 +15,7 @@ export default class AddCalendarScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { routeName } = navigation.state;
         return {
-            title: routeName,
+            title: 'Dodaj plan treningowy',
             headerLeft: (
                 <Ionicons
                     style={{ paddingLeft: 10 }}
