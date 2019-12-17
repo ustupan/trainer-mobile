@@ -4,10 +4,13 @@ import DatePicker from 'react-native-datepicker'
 import Button from "react-native-button";
 import {AppStyles} from "../../../AppStyles";
 import RNPickerSelect from "react-native-picker-select";
+import deviceStorage from "../../api/deviceStorage";
+import trainerService from "../../api/services/trainerService";
 
 export default class AddTrainingDayScreen extends React.Component {
 
     constructor(props) {
+        console.log(props);
         super(props);
         this.state = {
             trainingDayDate:"",
@@ -17,13 +20,29 @@ export default class AddTrainingDayScreen extends React.Component {
             note: "",
             description: "Dokłady opis treningu",
             title: "",
-
-
-
+            calendarId: this.props.navigation.state.params.calendar.id
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+        });
+        this.addTrainingDay = trainerService.addTrainingDay.bind(this);
     }
 
+
+
     clickEventListener = () => {
+        if(this.state.title === "") Alert.alert("Tytuł nie może być pusty!");
+        else if(this.state.trainingDayDate === "") Alert.alert("Termin treningu nie może być pusty!");
+        else {
+            let trainingDayDto = {
+                "title": this.state.title,
+                "description": this.state.description,
+                "trainingDate": this.state.trainingDayDate,
+                "calendarId": this.state.calendarId
+            };
+            this.addTrainingDay(this.state.jwt,trainingDayDto);
+        }
     };
 
     setLoadingFalse(){

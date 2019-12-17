@@ -6,6 +6,9 @@ import {AppStyles} from "../../../AppStyles";
 import RNPickerSelect from "react-native-picker-select";
 import ShowAthletesContainer from "../../containers/trainer/ShowAthletesContainer";
 import {Ionicons} from "@expo/vector-icons";
+import deviceStorage from "../../api/deviceStorage";
+import invitationService from "../../api/services/invitationService";
+import trainerService from "../../api/services/trainerService";
 
 export default class AddCalendarScreen extends React.Component {
 
@@ -31,6 +34,11 @@ export default class AddCalendarScreen extends React.Component {
             athleteUsername: "",
             athleteId: "",
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+        });
+        this.createCalendar = trainerService.createCalendar.bind(this);
     }
 
     selectAthleteListener = (item) => {
@@ -40,10 +48,17 @@ export default class AddCalendarScreen extends React.Component {
         })
     };
 
-    setLoadingFalse(){
-        this.setState({
-            loading: false
-        })
+    createCalendarListener(){
+        if(this.state.title === ''){
+            Alert.alert('Nie udało się stworzyć planu treningowego', 'Tytuł nie może być pusty!');
+        }
+        else if( this.state.athleteUsername === ''){
+            Alert.alert('Nie udało się stworzyć planu treningowego', 'Należy wybrać sportowca!');
+        }
+        else {
+            this.createCalendar(this.state.jwt, {title: this.state.title, athleteId: this.state.athleteId, trainerId: 1});
+
+        }
     }
 
     render() {
@@ -73,7 +88,7 @@ export default class AddCalendarScreen extends React.Component {
                     <ShowAthletesContainer navigation={this.props.navigation} type='select' onUserClick={this.selectAthleteListener.bind(this)}/>
                 </View>
 
-                <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.clickEventListener()}}>
+                <TouchableOpacity style={[styles.buttonContainer, styles.button]} onPress={() => {this.createCalendarListener()}}>
                     <Text style={styles.buttonText}>Swtórz plan treningowy</Text>
                 </TouchableOpacity>
             </View>

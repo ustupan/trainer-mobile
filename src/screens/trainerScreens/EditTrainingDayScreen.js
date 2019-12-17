@@ -4,6 +4,8 @@ import DatePicker from 'react-native-datepicker'
 import Button from "react-native-button";
 import {AppStyles} from "../../../AppStyles";
 import RNPickerSelect from "react-native-picker-select";
+import deviceStorage from "../../api/deviceStorage";
+import trainerService from "../../api/services/trainerService";
 
 
 export default class EditTrainingDayScreen extends React.Component {
@@ -11,17 +13,39 @@ export default class EditTrainingDayScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            trainingDayDate:"2019-05-01",
-            discipline: "Bieg na 100m",
-            motivationLevel: "",
-            dispositionLevel: "",
-            note: "Opis wykonania treningu",
-            description: "Dokłady opis treningu disabled disabled disableddisableddisableddisableddisableddisabled disabled disabled disabled disabled disabled disabled disabled",
-            title: "Bieg na 100m",
+            trainingDayDate:this.props.navigation.state.params.trainingDay.trainingDate,
+            motivationLevel: this.props.navigation.state.params.trainingDay.motivationLevel,
+            dispositionLevel: this.props.navigation.state.params.trainingDay.dispositionLevel,
+            note: this.props.navigation.state.params.trainingDay.note,
+            description: this.props.navigation.state.params.trainingDay.description,
+            title: this.props.navigation.state.params.trainingDay.title,
+            calendarId: this.props.navigation.state.params.trainingDay.calendarId,
+            id: this.props.navigation.state.params.trainingDay.id,
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+        });
+        this.editTrainingDay = trainerService.editTrainingDay.bind(this);
     }
 
     clickEventListener = () => {
+
+        if(this.state.title === "") Alert.alert("Tytuł nie może być pusty!");
+        else if(this.state.trainingDayDate === "") Alert.alert("Termin treningu nie może być pusty!");
+        else {
+            let trainingDayDto = {
+                "id": this.state.id,
+                "title": this.state.title,
+                "description": this.state.description,
+                "trainingDate": this.state.trainingDayDate,
+                "calendarId": this.state.calendarId,
+                "note": this.state.note,
+                "motivationLevel": this.state.motivationLevel,
+                "dispositionLevel":this.state.dispositionLevel,
+            };
+            this.editTrainingDay(this.state.jwt,trainingDayDto);
+        }
     };
 
     setLoadingFalse(){
@@ -31,6 +55,7 @@ export default class EditTrainingDayScreen extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         const motivationPlaceholder = {
             label: 'Wybierz poziom motywacji...',
             value: null,
@@ -52,7 +77,6 @@ export default class EditTrainingDayScreen extends React.Component {
                                 onChangeText={text => this.setState({ title: text })}
                                 value={this.state.title}
                                 placeholderTextColor={AppStyles.color.grey}
-
                             />
                         </View>
                         <View style={[styles.bodyContent, {marginBottom: 20}]}>

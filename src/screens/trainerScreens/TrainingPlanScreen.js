@@ -13,70 +13,98 @@ import {
     FlatList
 } from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
+import deviceStorage from "../../api/deviceStorage";
+import trainerService from "../../api/services/trainerService";
+import SplashScreen from "../SplashScreen";
+
+
+const monthNames = ["Styczenia", "Lutego", "Marca", "Kwietnia", "Maja", "Czerwca",
+    "Lipica", "Sierpnia", "Września", "Października", "Listopada", "Grudnia"
+];
 
 export default class TrainingPlanScreen extends Component {
 
     constructor(props) {
-        console.log(props);
         super(props);
         this.state = {
+            loading:true,
             trainingDays: [],
-            data: [
-                {id: "1", day:1, month: 'Sep'},
-                {id: "2", day:2, month: 'Aug'},
-                {id: "3", day:1, month: 'Dec'},
-                {id: "4", day:12, month: 'Jul'},
-                {id: "5", day:3, month: 'Oct'},
-                {id: "6", day:2, month: 'Aug'},
-                {id: "7", day:1, month: 'Dec'},
-                {id: "8", day:12, month: 'Jul'},
-                {id: "9", day:3, month: 'Oct'},
-                {id: "10", day:2, month: 'Aug'},
-                {id: "11", day:1, month: 'Dec'},
-                {id: "12", day:12, month: 'Jul'},
-                {id: "13", day:3, month: 'Oct'},
-                {id: "14", day:2, month: 'Aug'},
-                {id: "15", day:1, month: 'Dec'},
-                {id: "16", day:12, month: 'Jul'},
-                {id: "17", day:3, month: 'Oct'},
-                {id: "18", day:2, month: 'Aug'},
-                {id: "19", day:1, month: 'Dec'},
-                {id: "20", day:12, month: 'Jul'},
-                {id: "21", day:3, month: 'Oct'},
-            ],
+            calendar: {},
         };
+        this.loadJwt = deviceStorage.loadJwt.bind(this);
+        this.loadJwt().then( () => {
+            this.setState({loading: true});
+            this.getCalendarByAthleteId = trainerService.getCalendarByAthleteId.bind(this);
+        });
+        this.updateScreen = this.updateScreen.bind(this);
     }
 
-    eventClickListener = (viewId) => {
-        this.props.navigation.navigate('EditTrainingDaySwitch');
+    componentWillMount(){
+        this._subscribe = this.props.navigation.addListener('didFocus', () => {
+            this.updateScreen();
+            //Put your Data loading function here instead of my this.LoadData()
+        });}
+
+    updateScreen() {
+        this.state.loading = true;
+        this.getCalendarByAthleteId(this.state.jwt, this.props.navigation.state.params.athleteId);
+    }
+
+    eventClickListener = (item) => {
+       this.props.navigation.navigate('EditTrainingDaySwitch', {trainingDay: item});
     };
 
     addTrainingDayListiner = () => {
-        this.props.navigation.navigate('AddTrainingDaySwitch');
+        this.props.navigation.navigate('AddTrainingDaySwitch', {calendar: this.state.calendar});
     };
 
     render() {
+        if(this.state.loading) return (
+            <SplashScreen/>
+        );
+
+        if(Object.keys(this.state.calendar).length === 0) return (
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontSize:25, fontWeight:'bold',  color:"#ff5a66", marginTop: 30}}>Brak kalendarza</Text>
+            </View>
+        );
         return (
             <View style={styles.container}>
                 <FlatList
                     style={styles.eventList}
-                    data = {this.state.data}
+                    data = {this.state.calendar.trainingDays.map((trainingDay) => {
+                        return {
+                            "id": trainingDay.id.toString(),
+                            "day": new Date(trainingDay.trainingDate).getDate(),
+                            "month":  monthNames[new Date(trainingDay.trainingDate).getMonth()],
+                            "year": new Date(trainingDay.trainingDate).getFullYear(),
+                            "title": trainingDay.title,
+                            "description": trainingDay.description,
+                            "calendarId": trainingDay.calendarId,
+                            "trainingDate": trainingDay.trainingDate,
+                            "note": trainingDay.note,
+                            "motivationLevel": trainingDay.motivationLevel,
+                            "dispositionLevel":trainingDay.dispositionLevel,
+                        }
+                    }).sort((a,b) => {
+                        return new Date(a.trainingDate) - new Date(b.trainingDate);
+                    })}
                     keyExtractor={(item) => {
                         return item.id;
                     }}
                     renderItem = {({item}) => {
                         return (
                             <View>
-                                <TouchableOpacity onPress={() => this.eventClickListener("row")}>
+                                <TouchableOpacity onPress={() => this.eventClickListener(item)}>
                                     <View style={styles.eventBox}>
                                         <View style={styles.eventDate}>
                                             <Text  style={styles.eventDay}>{item.day}</Text>
                                             <Text  style={styles.eventMonth}>{item.month}</Text>
+                                            <Text  style={styles.eventYear}>{item.year}</Text>
                                         </View>
                                         <View style={[styles.eventContent, {borderColor: `#ff5a66`}]}>
-                                            <Text  style={styles.eventTime}>10:00 am - 10:45 am</Text>
-                                            <Text  style={styles.userName}>John Doe</Text>
-                                            <Text  style={styles.description}>Lorem ipsum dolor sit amet, elit consectetur</Text>
+                                            <Text  style={styles.eventTime}>{item.title}</Text>
+                                            <Text  style={styles.description}>{item.description}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -114,7 +142,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     eventDate:{
-        width:60,
+        width:90,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
@@ -125,7 +153,12 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
     eventMonth:{
-        fontSize:16,
+        fontSize:13,
+        color: "#ff5a66",
+        fontWeight: "600",
+    },
+    eventYear:{
+        fontSize:12,
         color: "#ff5a66",
         fontWeight: "600",
     },
@@ -139,6 +172,7 @@ const styles = StyleSheet.create({
         shadowRadius: 7.49,
         elevation: 12,
         flex:1,
+        height:100,
         flexDirection: 'column',
         alignItems: 'flex-start',
         marginLeft:10,

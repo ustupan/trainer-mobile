@@ -23,11 +23,12 @@ export default class AthleteProfileScreen extends Component {
             ],
             athlete: this.props.navigation.state.params.athlete,
         };
+        console.log(this.state.athlete.id);
     }
 
     clickEventListener = (item) => {
         if(item.name === 'Rezultaty sportowca') this.props.navigation.navigate('ResultList');
-        else this.props.navigation.navigate('TrainingPlanSwitch');
+        else this.props.navigation.navigate('TrainingPlanSwitch', {athleteId: this.state.athlete.id});
     };
 
     render() {
